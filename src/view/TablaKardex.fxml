@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <BorderPane prefHeight="500.0" prefWidth="800.0">
+         <top>
+            <MenuBar BorderPane.alignment="CENTER">
+              <menus>
+                <Menu mnemonicParsing="false" text="Archivo">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Cambiar información básica" />
+                        <MenuItem mnemonicParsing="false" text="Cargar datos de otro archivo" />
+                        <MenuItem mnemonicParsing="false" text="Guardar cambios" />
+                        <MenuItem mnemonicParsing="false" text="Mostrar información básica" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Editar">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Agregar registro" />
+                        <MenuItem mnemonicParsing="false" text="Corregir registro" />
+                        <MenuItem mnemonicParsing="false" text="Eliminar registro" />
+                        <MenuItem mnemonicParsing="false" text="Registrar devolución" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Ayuda">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="¿Cómo usar?" />
+                        <MenuItem mnemonicParsing="false" text="Créditos" />
+                        <MenuItem mnemonicParsing="false" text="Salir" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+         </top>
+         <center>
+            <VBox BorderPane.alignment="CENTER">
+               <children>
+                  <GridPane>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="390.20001220703125" minWidth="10.0" prefWidth="251.4000030517578" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="607.1999816894531" minWidth="10.0" prefWidth="222.80001220703127" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="607.1999816894531" minWidth="10.0" prefWidth="209.9999877929688" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label fx:id="lblEmpresa" text="Nombre de la empresa:" />
+                        <Label fx:id="lblMetodo" text="Método de valoración:" GridPane.rowIndex="1" />
+                        <Label fx:id="lblArticulo" text="Artículo:" GridPane.columnIndex="1" />
+                        <Label fx:id="lblPeriodo" text="Período:" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label fx:id="lblUnidades" text="Unidad:" GridPane.columnIndex="2" />
+                        <Label fx:id="lblMin" text="Min:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets left="10.0" right="10.0" />
+                     </padding>
+                  </GridPane>
+                  <SplitPane dividerPositions="0.7" prefHeight="413.0" prefWidth="1000.0">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="364.0" prefWidth="696.0">
+                           <children>
+                              <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="412.0" prefWidth="696.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <GridPane prefHeight="364.8" prefWidth="296.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <ComboBox fx:id="cbTipoModificacion" prefWidth="220.0" promptText="Seleccione tipo de modificación..." GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                                    <VBox prefHeight="200.0" prefWidth="100.0" GridPane.halignment="CENTER" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="SOMETIMES">
+                                       <children>
+                                          <Label alignment="CENTER" text="Fecha:" />
+                                          <DatePicker fx:id="dpFecha" />
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
+                                       <children>
+                                          <Label text="Valor unitario:" />
+                                          <TextField fx:id="tfValorUnitario" />
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="3">
+                                       <children>
+                                          <Label text="Cantidad:" />
+                                          <TextField fx:id="tfCantidad" />
+                                       </children>
+                                    </VBox>
+                                    <Button fx:id="btnModificarTabla" mnemonicParsing="false" text="Agregar cambio" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                                 </children>
+                              </GridPane>
+                           </children>
+                           <padding>
+                              <Insets bottom="25.0" left="20.0" right="20.0" top="10.0" />
+                           </padding>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
+               </children>
+            </VBox>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>
