@@ -1,8 +1,10 @@
 package model;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 
@@ -13,16 +15,15 @@ public class Kardex {
 	private static final String APP_ICON_SOURCE = "img/icon.png";
 	private static final String[] TIPOS_METODOS = 
 		{"PEPS - Primero en entrar, primero en salir","PP - Promedio Ponderado"};
+	private static final String[] TIPOS_MODIFICACIONES = {"COMPRA","VENTA","DEVOLUCIÓN"};
 	private static final String[] MESES = {"ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE"};
 	private static final String[] ANIOS = {"2016","2017","2018","2019","2020","2021","2022","2023","2024","2025"};
 	private static final String EXTENCION_KARDEX = ".kardex";
 	public static final String SEPARADOR = "#";
-	private String rutaArchivoActual;
-	private String nombreArchivo;
+	private Archivo archivo;
 	
 	public Kardex() {
-		rutaArchivoActual = "";
-		nombreArchivo = "";
+		archivo = new Archivo();
 	}
 	
 	public String[] nombresKardexCreados() {
@@ -36,10 +37,9 @@ public class Kardex {
 		if (!carpeta.exists())
 			return null;
 		File[] archivos = carpeta.listFiles(filtro);
-		String[] datos = new String[archivos.length+1];
-		datos[0] = "Seleccione...";
-		for (int i = 1; i < archivos.length+1; i++) {
-			String nombre = archivos[i-1].getName();
+		String[] datos = new String[archivos.length];
+		for (int i = 0; i < archivos.length; i++) {
+			String nombre = archivos[i].getName();
 			nombre = nombre.length()<75 ? nombre : nombre.substring(0, 52)+"..."+nombre.substring(nombre.length()-20,nombre.length());
 			datos[i] = nombre;
 		}
@@ -118,33 +118,27 @@ public class Kardex {
 	public boolean crearRegistroKardex(String[] datos) {
 		if ( !estanDatosCrearKardexBien(datos) )
 			return false;
-		String nombreEmpresa = datos[0];
-		String metodo = datos[1].split(" - ")[0];
-		String periodo = datos[2].split("/")[0]+"_"+datos[2].split("/")[1];
-		String articulo = datos[3];
-		nombreArchivo = nombreEmpresa+"_"+metodo+"_"+articulo+"_"+periodo+EXTENCION_KARDEX;
-        rutaArchivoActual = CARPETA+"\\resources\\data\\"+nombreArchivo;
-		File archivo = new File(rutaArchivoActual);
+		setDatosArchivo(datos);
+		File file = new File(archivo.getRutaArchivoActual());
 		BufferedWriter bw = null;
 		try {
-	        if (!archivo.exists())
-	        	bw = new BufferedWriter(new FileWriter(archivo));
+	        if (!file.exists())
+	        	bw = new BufferedWriter(new FileWriter(file));
 	        	bw.close();
 	        guardarDatosRegistroKardex(datos);
 		} catch(Exception e) { //No lo pudo crear
-			nombreArchivo = "";
-			rutaArchivoActual = "";
+			cerrarArchivo();
 			return false;
 		}
 		return true;
 	}
 	
 	public boolean guardarDatosRegistroKardex(String[] datos) {
-		FileWriter fichero = null;
+		FileWriter file = null;
         PrintWriter pw = null;
         try {
-            fichero = new FileWriter(rutaArchivoActual);
-            pw = new PrintWriter(fichero);
+        	file = new FileWriter(archivo.getRutaArchivoActual());
+            pw = new PrintWriter(file);
             
             //Debe hacer calculos de nuevo por que puede agregar registros intermedios
             String guardar = obtenerString(datos);
@@ -154,13 +148,64 @@ public class Kardex {
             e.printStackTrace();
         } finally {
            try {
-           if (null != fichero)
-              fichero.close();
+           if (null != file)
+        	   file.close();
            } catch (Exception e2) {
               e2.printStackTrace();
            }
         }
 		return true;
+	}
+	
+	public void leerArchivo(String ruta) {
+		
+		File file = null;
+	    FileReader fr = null;
+	    BufferedReader br = null;
+
+	    try {
+	    	ruta = CARPETA+"\\resources\\data\\"+ruta;
+	    	file = new File (ruta);
+	    	fr = new FileReader (file);
+	    	br = new BufferedReader(fr);
+
+	         // Lectura del fichero
+	    	String linea;
+	    	int cont = 1;
+	    	while((linea=br.readLine())!=null) {
+	    		String[] datos = linea.split(SEPARADOR);
+	    		if (cont==1) {	    			
+	    			setDatosArchivo(datos);
+	    			cont+=1;
+	    			continue;
+	    		}
+	    		cont+=1;
+	    	}
+	    	
+	    }
+	    catch(Exception e){
+	    	e.printStackTrace();
+	    } finally {
+	       try {                    
+	          if( null != fr ){   
+	        	  fr.close();     
+	          }                  
+	       } catch (Exception e2) { 
+	    	   e2.printStackTrace();
+	       }
+	    }
+		
+	}
+	
+	private void setDatosArchivo(String[] datos) {
+		archivo = new Archivo();
+		archivo.setDatos(datos);
+		String nombreEmpresa = datos[0];
+		String metodo = datos[1].split(" - ")[0];
+		String periodo = datos[2].split("/")[0]+"_"+datos[2].split("/")[1];
+		String articulo = datos[3];
+		archivo.setNombreArchivo(nombreEmpresa+"_"+metodo+"_"+articulo+"_"+periodo+EXTENCION_KARDEX);
+        archivo.setRutaArchivoActual(CARPETA+"\\resources\\data\\"+archivo.getNombreArchivo());
 	}
 	
 	public String getAppName() {
@@ -179,6 +224,18 @@ public class Kardex {
 		return APP_ICON_SOURCE;
 	}
 	
+	public String[] getTiposModificaciones() {
+		return TIPOS_MODIFICACIONES;
+	}
+	
+	public String[] getDatosCabeceraKardex() {
+		return archivo.getDatosCabeceraKardex();
+	}
+	
+	public void cerrarArchivo() {
+		archivo = new Archivo();
+	}
+	
 	public String[][] getDatosPeriodos() {
 		String[] a = new String[100];
 		int n = 2019;
@@ -187,14 +244,6 @@ public class Kardex {
 			a[i] = (n-i)+"";
 		}
 		return new String[][]{MESES,a};
-	}
-	
-	public String getRutaArchivoActual() {
-		return rutaArchivoActual;
-	}
-	
-	public String getNombreArchivo() {
-		return nombreArchivo;
 	}
 	
 }

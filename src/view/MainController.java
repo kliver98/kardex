@@ -20,14 +20,26 @@ public class MainController implements Initializable {
 	private ComboBox<String> cbKardex;
 	
 	public MainController() {
-		cbKardex = new ComboBox<String>();
+		
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		cbKardex.getItems().removeAll(cbKardex.getItems());
 		cbKardex.getItems().addAll(Main.getModel().nombresKardexCreados());
-		cbKardex.getSelectionModel().select("Seleccione...");
+	}
+	
+	public void cambiarSceneTablaKardex(ActionEvent evento) throws IOException {
+		
+		Main.getModel().leerArchivo(cbKardex.getSelectionModel().getSelectedItem());
+		Parent crearNuevoParent = FXMLLoader.load(getClass().getResource("TablaKardex.fxml"));
+		Scene crearNuevoScene = new Scene(crearNuevoParent);
+		
+		Stage window = (Stage)((Node)evento.getSource()).getScene().getWindow();
+		
+		window.setScene(crearNuevoScene);
+		window.show();
+		
 	}
 	
 	public void cambiarSceneCrearNuevo(ActionEvent evento) throws IOException {

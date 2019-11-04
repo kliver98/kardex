@@ -11,9 +11,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class CrearNuevoController implements Initializable {
@@ -33,7 +35,7 @@ public class CrearNuevoController implements Initializable {
 	@FXML
 	private TextField tfProovedor;
 	@FXML
-	private TextArea taComentario;
+	private TextField tfComentario;
 	@FXML
 	private TextField tfMin;
 	@FXML
@@ -69,11 +71,13 @@ public class CrearNuevoController implements Initializable {
 		String[] datos = new String[]{tfEmpresa.getText(),cbMetodo.getSelectionModel().getSelectedItem(),
 				cbMes.getSelectionModel().getSelectedItem()+"/"+cbAnio.getSelectionModel().getSelectedItem(),
 				tfArticulo.getText(), tfUnidad.getText(), tfProovedor.getText(), tfMin.getText(), tfMax.getText(),
-				taComentario.getText()};
+				tfComentario.getText()};
 		boolean seCreoArchivo = Main.getModel().crearRegistroKardex(datos);
 		try {			
 			if (seCreoArchivo)
 				cambiarSceneTablaKardex(evento);
+			else
+				mensajeAlerta("Ocurrio un error","Verifique los datos, recuerde que no puede poner el símbolo \"_\"");
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -88,6 +92,18 @@ public class CrearNuevoController implements Initializable {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public void mensajeAlerta(String titulo, String mensaje) {
+		Alert alert = new Alert(AlertType.WARNING);
+		
+		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+		stage.getIcons().add(new Image(Main.getModel().getIconSource()));
+		
+		alert.setTitle(titulo);
+		alert.setHeaderText(null);
+		alert.setContentText(mensaje);
+		alert.showAndWait();
 	}
 	
 	public void cambiarSceneTablaKardex(ActionEvent evento) throws IOException {
