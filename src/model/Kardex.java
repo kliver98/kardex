@@ -15,7 +15,7 @@ public class Kardex {
 	private static final String APP_ICON_SOURCE = "img/icon.png";
 	private static final String[] TIPOS_METODOS = 
 		{"PEPS - Primero en entrar, primero en salir","PP - Promedio Ponderado"};
-	private static final String[] TIPOS_MODIFICACIONES = {"COMPRA","VENTA","DEVOLUCIÓN"};
+	private static final String[] TIPOS_MODIFICACIONES = {"COMPRA C","VENTA V","DEVOLUCIÓN D"};
 	private static final String[] MESES = {"ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE"};
 	private static final String[] ANIOS = {"2016","2017","2018","2019","2020","2021","2022","2023","2024","2025"};
 	private static final String EXTENCION_KARDEX = ".kardex";

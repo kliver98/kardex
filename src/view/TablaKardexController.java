@@ -4,17 +4,18 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -23,9 +24,11 @@ public class TablaKardexController implements Initializable {
 	@FXML
 	private TextField tfCantidad;
 	@FXML
-	private TextField tfValorUnitario;
+	private TextField tfValor;
 	@FXML
-	private DatePicker dpFecha;
+	private TextField tfIdentificador;
+	@FXML
+	private TextField tfDia;
 	@FXML
 	private ComboBox<String> cbTipoModificacion;
 	@FXML
@@ -41,7 +44,13 @@ public class TablaKardexController implements Initializable {
 	@FXML
 	private Label lblMin;
 	@FXML
+	private Label lblValor;
+	@FXML
 	private MenuBar menuBar;
+	@FXML
+	private TableView<String> tabla;
+	private ObservableList<String> tablaModel = FXCollections.observableArrayList("hola","soy","kliver");
+	private String datosCabecera[];//empresa-metodo-periodo-articulo-unidad-proovedor-cantMin-cantMax-comentario
 	
 	public TablaKardexController() {
 		
@@ -52,13 +61,33 @@ public class TablaKardexController implements Initializable {
 		cbTipoModificacion.getItems().removeAll(cbTipoModificacion.getItems());
 		cbTipoModificacion.getItems().addAll(Main.getModel().getTiposModificaciones());
 		
-		String[] datosCabecera = Main.getModel().getDatosCabeceraKardex();
+		datosCabecera = Main.getModel().getDatosCabeceraKardex();
 		lblEmpresa.setText("Nombre de la empresa: "+datosCabecera[0]);
-		lblMetodo.setText("Método de valoración: "+datosCabecera[1].split(" - ")[0]);
+		datosCabecera[1] = datosCabecera[1].split(" - ")[0];
+		lblMetodo.setText("Método de valoración: "+datosCabecera[1]);
+		lblValor.setText(datosCabecera[1].equalsIgnoreCase("PEPS") ? "Valor unitario: ":lblValor.getText());
 		lblArticulo.setText("Artículo: "+datosCabecera[2]);
 		lblPeriodo.setText("Período: "+datosCabecera[3]);
 		lblUnidades.setText("Unidad: "+datosCabecera[4]);
 		lblMin.setText("Cantidad mínima: "+datosCabecera[5]+" "+datosCabecera[4]);
+		
+		tabla.getItems().addAll(tablaModel);
+	}
+	
+	public void setModificationsFields(ActionEvent evento) {
+		String item = cbTipoModificacion.getSelectionModel().getSelectedItem();
+		String[] tiposModificaciones = Main.getModel().getTiposModificaciones();
+		if (item.equalsIgnoreCase(tiposModificaciones[0])) {
+			tfValor.setEditable(true);
+			tfDia.setEditable(true);
+		} else if (item.equalsIgnoreCase(tiposModificaciones[1])) {
+			tfValor.setText("");
+			tfValor.setEditable(false);
+			tfDia.setEditable(true);
+		} else if (item.equalsIgnoreCase(tiposModificaciones[2])) {
+			tfDia.setEditable(false);
+			tfValor.setEditable(false);
+		}
 	}
 	
 	public void btnModificarTabla(ActionEvent evento) { //Aqui se da compra-venta-devolucion
