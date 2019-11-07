@@ -96,14 +96,25 @@ public class Elemento {
 		this.valorSaldo = valorSaldo;
 	}
 	
-	public boolean noEsVenta() {		
-		return !descripcion.equals("venta") ;
+	public boolean esVenta() {		
+		return cantidadSalida != 0 && cantidadEntrada == 0 ;
 	}
+	
+	public boolean esCompra() {		
+		return valorUnitario != 0 && cantidadEntrada != 0 ;
+	}
+	
+	public boolean esDevolucion() {		
+		return cantidadSalida < 0;
+	}
+	
 	
 	public String toString() {
 	
 		return dia + Kardex.SEPARADOR + descripcion + Kardex.SEPARADOR+ valorUnitario + Kardex.SEPARADOR + cantidadEntrada + Kardex.SEPARADOR+ valorEntrada + Kardex.SEPARADOR + cantidadSalida + Kardex.SEPARADOR + valorSalida + Kardex.SEPARADOR + cantidadSaldo + Kardex.SEPARADOR + valorSaldo;
 		
 	}
+
+	
   
 }

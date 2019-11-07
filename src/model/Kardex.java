@@ -7,6 +7,7 @@ import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 public class Kardex {
 
@@ -22,10 +23,14 @@ public class Kardex {
 	public static final String SEPARADOR = "#";
 	private PEPS peps;
 	private Archivo archivo;
+	private ArrayList<Elemento> elementos;
+	private PromedioPonderado pp;
 	
 	public Kardex() {
 		archivo = new Archivo();
 		peps = new PEPS();
+		elementos = new ArrayList<>();
+		pp = new PromedioPonderado();
 	}
 	
 	public String[] nombresKardexCreados() {
@@ -144,7 +149,7 @@ public class Kardex {
 			if (metodo.equalsIgnoreCase("PEPS")) {
 				nDatos = peps.calcular();
 			}else if (metodo.equalsIgnoreCase("PP")) {
-				//Aqui Fanny, poner metodo que devuelve matrix con datos
+				nDatos = this.matrizActualizada();
 			}
 		}
 		return nDatos;
@@ -324,4 +329,68 @@ public class Kardex {
 	}
 
 	
+	public ArrayList<Elemento> getElementos() {
+		return elementos;
+	}
+
+	public void setElementos(ArrayList<Elemento> elementos) {
+		this.elementos = elementos;
+	}
+
+	public PromedioPonderado getPp() {
+		return pp;
+	}
+
+	public void setPp(PromedioPonderado pp) {
+		this.pp = pp;
+	}
+	
+	public void addDatos(String[] datos) {
+		
+		//String dia, String descripcion, int cantidad, double valorU
+		String dia = datos[0];
+		String descripcion = datos[1];
+		double valorU = Double.parseDouble(datos[2]);
+		int cantidad = Integer.parseInt(datos[3]);
+		
+		if(valorU != 0 && cantidad != 0){
+			Elemento agregar  = new Elemento(dia, descripcion, valorU, cantidad, 0, 0, 0, 0,0);		
+			elementos.add(agregar);
+		}else if(valorU == 0 && cantidad != 0) {
+			Elemento agregar  = new Elemento(dia, descripcion, valorU, 0, 0, cantidad, 0, 0,0);
+			elementos.add(agregar);
+		}else {
+			Elemento agregar = search(dia);
+			int cant = agregar.getCantidadSalida();
+			agregar.setCantidadSalida(cant*-1);
+			elementos.add(agregar);
+		}
+				
+				
+	}
+	
+	public Elemento search(String dia) {
+		
+		Elemento search = null;
+		boolean encontrado = false;
+		int i = 0;
+		while(i < elementos.size() && encontrado == false) {
+			if(elementos.get(i).getDia().equals(dia)) {
+				search = elementos.get(i);
+				encontrado = true;
+			}
+		}	
+		return search;
+	}
+	
+	public String[][] matrizActualizada(){
+		
+		String[][] matriz = pp.lecturaDatos(elementos);
+		
+		return matriz;
+	}
+	
+	public boolean esPEPS() {
+		return archivo.getMetodoValoracion().split(" - ")[0].equals("PEPS");
+	}
 }

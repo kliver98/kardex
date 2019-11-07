@@ -4,24 +4,39 @@ import java.util.ArrayList;
 
 public class PromedioPonderado {
 
+	private static double saldoTotal = 0;
+	private static int cantidadTotal = 0;
 	public PromedioPonderado() {
 
 	}
 
 	public String[][] lecturaDatos(ArrayList<Elemento> datos) {
-		double saldoTotal = 0;
-		int cantidadTotal = 0;
+		
+		int i = 0;
+		Elemento actual = datos.get(i);
+		
 
-		for (int i = 0; i < datos.size(); i++) {
-
-			Elemento actual = datos.get(i);
-			if (actual != null) {
-				if (actual.noEsVenta()) {
-					compraPP(actual, cantidadTotal, saldoTotal);
-				} else {
-					ventaPP(actual, cantidadTotal, saldoTotal);
+		while( i < datos.size() && actual != null) {	
+		
+				if (actual.esCompra()) {
+					compraPP(actual);
+					
+					
+				} else if(actual.esVenta()) {
+					ventaPP(actual);
 				}
-			}		
+				else if(actual.esDevolucion()) {
+					ventaPP(actual);
+				}
+				
+				System.out.println(saldoTotal +"saldo total general");
+				i++;
+				if(i < datos.size()) {
+					actual = datos.get(i);
+				}
+				
+				
+			
 		}
 		
 		String[][] matriz = creacionMatriz(datos);
@@ -29,21 +44,24 @@ public class PromedioPonderado {
 
 	}
 
-	public void compraPP(Elemento act, int cantidadTotal, double saldoTotal) {
+	public void compraPP(Elemento act) {
 
-		if (act.getValorUnitario() != 0 && act.getCantidadEntrada() != 0) {
+		//if (act.getValorUnitario() != 0 && act.getCantidadEntrada() != 0) {]
+			
 
 			cantidadTotal = cantidadTotal + act.getCantidadEntrada();
 			double entradaT = act.getCantidadEntrada() * act.getValorUnitario();
 			act.setValorEntrada(entradaT);
 			saldoTotal = saldoTotal + entradaT;
 			act.setCantidadSaldo(cantidadTotal);
-			act.setValorSaldo(cantidadTotal);
-		}
+			act.setValorSaldo(saldoTotal);
+			System.out.println(act.getDia()+ "dia" + "saldo total:" + saldoTotal);
+		
+			
 
 	}
 
-	public void ventaPP(Elemento act, int cantidadTotal, double saldoTotal) {
+	public void ventaPP(Elemento act) {
 
 		if (cantidadTotal != 0) {
 			double valorUnitario = saldoTotal / cantidadTotal;
@@ -56,38 +74,28 @@ public class PromedioPonderado {
 			act.setCantidadSaldo(cantidadTotal);
 			act.setValorSalida(saldoS);
 		}
+		
+		
 	}
 
 	public String[][] creacionMatriz(ArrayList<Elemento> datos) {
 		int col = datos.size();
-		String[][] matriz = new String[col][10];
+		String[][] matriz = new String[col][9];
 		
-		for (int i = 0; i <datos.size(); i++) {
-			
+		for (int i = 0; i < matriz.length; i++) {
 			Elemento act = datos.get(i);
-			
-			if (act != null) {
-				
-				String[] info = act.toString().split("#");
-				
-				if(info.length == 10) {
-					
-					for (int j = 0; j < matriz.length; j++) {
-						for (int k = 0; k < matriz[j].length; k++) {
-							matriz[j][k] = info[k];
-						}
-					}
-					
+			for (int j = 0; j < matriz[i].length; j++) {
+				if (act != null) {
+					String[] info = act.toString().split("#");
+					matriz[i][j] = info[j];
 				}
 			}
 		}
 		
+
+		
 		return matriz;
 	}
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
 
 }
