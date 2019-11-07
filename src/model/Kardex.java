@@ -152,7 +152,8 @@ public class Kardex {
 			if (metodo.equalsIgnoreCase("PEPS")) {
 				nDatos = peps.calcular();
 			}else if (metodo.equalsIgnoreCase("PP")) {
-				nDatos = this.matrizActualizada();
+				nDatos = this.matrizActualizada(datos);
+				//nDatos = this.matrizActualizada();
 			}
 		}
 		return nDatos;
@@ -387,9 +388,9 @@ public class Kardex {
 		return search;
 	}
 	
-	public String[][] matrizActualizada(){
-		leerArchivo(archivo.getRutaArchivoActual());
-		addDatos(datosPP);
+	public String[][] matrizActualizada(String[] datos){
+		
+		addDatos(datos);
 		
 		String[][] matriz = pp.lecturaDatos(elementos);
 		

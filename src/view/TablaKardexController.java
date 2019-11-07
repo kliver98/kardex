@@ -147,6 +147,7 @@ public class TablaKardexController implements Initializable {
 				"0","0","0"}; //Estoy vendiendo
 		datos = !cbTipoModificacion.getSelectionModel().getSelectedItem().split(" ")[1].equalsIgnoreCase("D") ? datos : new String[] {tfDia.getText(),"D","","","","","","",""};
 		String[][] matrix = Main.getModel().modificarFila(datos);
+		
 		if (matrix==null)
 			return;
 		tabla.getItems().clear();
