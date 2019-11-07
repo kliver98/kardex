@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class Kardex {
 
-	private static final String APP_NAME = "Sistema de registro de Inventario - Kardex";
+	private static final String APP_NAME = "Sistema de registro de Inventario - Kardex por Fanny & Kliver";
 	private static final String CARPETA = System.getProperty("user.dir");
 	private static final String APP_ICON_SOURCE = "img/icon.png";
 	private static final String[] TIPOS_METODOS = 
@@ -153,6 +153,10 @@ public class Kardex {
 			}
 		}
 		return nDatos;
+	}
+	
+	public boolean eliminarRegistro(int dia) {
+		return archivo.eliminarRegistro(dia);
 	}
 	
 	public boolean guardarDatosRegistroKardex(String[] datos) {

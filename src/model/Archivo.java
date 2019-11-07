@@ -71,6 +71,11 @@ public class Archivo {
 		comentario = datos.length>8 ? datos[8]:"";
 	}
 	
+	public boolean eliminarRegistro(int dia) {
+		datos.remove(dia);
+		return !datos.containsKey(dia);
+	}
+	
 	public String[] getDatosCabeceraKardex() {
 		return new String[] {nombreEmpresa,metodoValoracion,articulo, periodo, unidad, cantMinima.toString()};
 	}

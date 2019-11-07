@@ -38,13 +38,13 @@ public class PEPS {
 			result[i] = datos;
 			i+=1;
 		}
-		for (int j = 0; j < result.length; j++) {
-			for (int j2 = 0; j2 < result[j].length; j2++) {
-				System.out.print(result[j][j2]+" ");
-			}
-			System.out.println();
-		}
-		System.out.println("-----------");
+//		for (int j = 0; j < result.length; j++) {
+//			for (int j2 = 0; j2 < result[j].length; j2++) {
+//				System.out.print(result[j][j2]+" ");
+//			}
+//			System.out.println();
+//		}
+//		System.out.println("-----------");
 		return result;
 	}
 	
