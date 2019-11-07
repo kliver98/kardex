@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Kardex {
 
@@ -25,12 +26,14 @@ public class Kardex {
 	private Archivo archivo;
 	private ArrayList<Elemento> elementos;
 	private PromedioPonderado pp;
+	private String[] datosPP;
 	
 	public Kardex() {
 		archivo = new Archivo();
 		peps = new PEPS();
 		elementos = new ArrayList<>();
 		pp = new PromedioPonderado();
+		datosPP = null;
 	}
 	
 	public String[] nombresKardexCreados() {
@@ -149,7 +152,8 @@ public class Kardex {
 			if (metodo.equalsIgnoreCase("PEPS")) {
 				nDatos = peps.calcular();
 			}else if (metodo.equalsIgnoreCase("PP")) {
-				nDatos = this.matrizActualizada();
+				nDatos = this.matrizActualizada(datos);
+				//nDatos = this.matrizActualizada();
 			}
 		}
 		return nDatos;
@@ -200,6 +204,7 @@ public class Kardex {
 	    	int cont = 1;
 	    	while((linea=br.readLine())!=null) {
 	    		String[] datos = linea.split(SEPARADOR);
+	    		datosPP = datos;
 	    		if (cont==1) {	    			
 	    			setDatosArchivo(datos);
 	    			cont+=1;
@@ -369,7 +374,7 @@ public class Kardex {
 			agregar.setCantidadSalida(cant*-1);
 			elementos.add(agregar);
 		}
-				
+			
 				
 	}
 	
@@ -387,7 +392,9 @@ public class Kardex {
 		return search;
 	}
 	
-	public String[][] matrizActualizada(){
+	public String[][] matrizActualizada(String[] datos){
+		
+		addDatos(datos);
 		
 		String[][] matriz = pp.lecturaDatos(elementos);
 		
