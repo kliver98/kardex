@@ -28,25 +28,23 @@
               <menus>
                 <Menu mnemonicParsing="false" text="Archivo">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Cambiar información básica" />
-                        <MenuItem mnemonicParsing="false" text="Cargar datos de otro archivo" />
+                        <MenuItem mnemonicParsing="false" text="Borrar archivo" visible="false" />
+                    <MenuItem mnemonicParsing="false" onAction="#cambiarSceneModificarDatosBasicos" text="Cambiar información básica" visible="false" />
                         <MenuItem mnemonicParsing="false" text="Guardar cambios" />
-                        <MenuItem mnemonicParsing="false" text="Mostrar información básica" />
+                        <MenuItem mnemonicParsing="false" onAction="#cambiarSceneVistaDatosBasicos" text="Mostrar información básica" />
                         <MenuItem mnemonicParsing="false" onAction="#cerrarArchivo" text="Cerrar" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Editar">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Agregar registro" />
-                        <MenuItem mnemonicParsing="false" text="Corregir registro" />
-                        <MenuItem mnemonicParsing="false" text="Eliminar registro" />
-                        <MenuItem mnemonicParsing="false" text="Registrar devolución" />
+                        <MenuItem mnemonicParsing="false" onAction="#corregirRegistro" text="Corregir registro" />
+                        <MenuItem mnemonicParsing="false" onAction="#eliminarRegistro" text="Eliminar registro" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Ayuda">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="¿Cómo usar?" />
-                        <MenuItem mnemonicParsing="false" text="Créditos" />
+                    <MenuItem mnemonicParsing="false" onAction="#mensajeAyuda" text="¿Cómo usar?" />
+                        <MenuItem mnemonicParsing="false" onAction="#mensajeCreditos" text="Créditos" />
                         <MenuItem mnemonicParsing="false" onAction="#exit" text="Salir" />
                   </items>
                 </Menu>
@@ -81,7 +79,7 @@
                         <Insets left="10.0" right="10.0" />
                      </padding>
                   </GridPane>
-                  <SplitPane dividerPositions="0.7" prefHeight="413.0" prefWidth="1000.0">
+                  <SplitPane dividerPositions="0.71" prefHeight="413.0" prefWidth="1000.0">
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="364.0" prefWidth="696.0">
                            <children>
@@ -89,25 +87,25 @@
                                  <content>
                                     <TableView fx:id="tabla">
                                       <columns>
-                                        <TableColumn prefWidth="45.0" resizable="false" text="Día" />
-                                        <TableColumn prefWidth="100.0" resizable="false" text="Descripción" />
-                                          <TableColumn prefWidth="100.0" resizable="false" text="Valor Unitario" />
+                                        <TableColumn fx:id="dia" prefWidth="45.0" resizable="false" text="Día" />
+                                        <TableColumn fx:id="descripcion" prefWidth="100.0" resizable="false" text="Descripción" />
+                                          <TableColumn fx:id="valorUnitario" prefWidth="100.0" resizable="false" text="Valor Unitario" />
                                           <TableColumn prefWidth="75.0" resizable="false" text="Entradas">
                                              <columns>
-                                                <TableColumn prefWidth="70.0" resizable="false" text="Cantidad" />
-                                                <TableColumn prefWidth="90.0" resizable="false" text="Valor" />
+                                                <TableColumn fx:id="cantEntrada" prefWidth="72.0" resizable="false" text="Cantidad" />
+                                                <TableColumn fx:id="valorEntrada" prefWidth="93.0" resizable="false" text="Valor" />
                                              </columns>
                                           </TableColumn>
                                           <TableColumn prefWidth="75.0" resizable="false" text="Salidas">
                                              <columns>
-                                                <TableColumn prefWidth="70.0" resizable="false" text="Cantidad" />
-                                                <TableColumn prefWidth="90.0" resizable="false" text="Valor" />
+                                                <TableColumn fx:id="cantSalidas" prefWidth="72.0" resizable="false" text="Cantidad" />
+                                                <TableColumn fx:id="valorSalidas" prefWidth="93.0" resizable="false" text="Valor" />
                                              </columns>
                                           </TableColumn>
                                           <TableColumn prefWidth="75.0" resizable="false" text="Saldo">
                                              <columns>
-                                                <TableColumn prefWidth="70.0" resizable="false" text="Cantidad" />
-                                                <TableColumn prefWidth="90.0" resizable="false" text="Valor" />
+                                                <TableColumn fx:id="cantSaldo" prefWidth="72.0" resizable="false" text="Cantidad" />
+                                                <TableColumn fx:id="valorSaldo" prefWidth="93.0" resizable="false" text="Valor" />
                                              </columns>
                                           </TableColumn>
                                       </columns>
@@ -143,7 +141,7 @@
                                     </VBox>
                                     <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
                                        <children>
-                                          <Label fx:id="lblValor" text="Valor:" />
+                                          <Label fx:id="lblValor" text="Valor Unitario:" />
                                           <TextField fx:id="tfValor">
                                              <font>
                                                 <Font size="14.0" />
@@ -162,8 +160,8 @@
                                     <Button fx:id="btnModificarTabla" mnemonicParsing="false" onAction="#btnModificarTabla" text="Agregar cambio" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
                                     <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="4">
                                        <children>
-                                          <Label text="Identificador: " />
-                                          <TextField fx:id="tfIdentificador">
+                                          <Label fx:id="lbImp" text="Descripción:" />
+                                          <TextField fx:id="tfDescripcion">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>

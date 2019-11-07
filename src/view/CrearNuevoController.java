@@ -94,7 +94,7 @@ public class CrearNuevoController implements Initializable {
 		
 	}
 	
-	public void mensajeAlerta(String titulo, String mensaje) {
+	private void mensajeAlerta(String titulo, String mensaje) {
 		Alert alert = new Alert(AlertType.WARNING);
 		
 		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -107,27 +107,21 @@ public class CrearNuevoController implements Initializable {
 	}
 	
 	public void cambiarSceneTablaKardex(ActionEvent evento) throws IOException {
-		
-		Parent crearNuevoParent = FXMLLoader.load(getClass().getResource("TablaKardex.fxml"));
-		Scene crearNuevoScene = new Scene(crearNuevoParent);
-		
-		Stage window = (Stage)((Node)evento.getSource()).getScene().getWindow();
-		
-		window.setScene(crearNuevoScene);
-		window.show();
-		
+		cambiarScene(evento,"TablaKardex.fxml");
 	}
 	
 	public void cambiarSceneMain(ActionEvent evento) throws IOException {
-		
-		Parent mainParent = FXMLLoader.load(getClass().getResource("Main.fxml"));
+		cambiarScene(evento,"Main.fxml");
+	}
+	
+	private void cambiarScene(ActionEvent evento, String nombre) throws IOException {
+		Parent mainParent = FXMLLoader.load(getClass().getResource(nombre));
 		Scene mainScene = new Scene(mainParent);
 		
 		Stage window = (Stage)((Node)evento.getSource()).getScene().getWindow();
 		
 		window.setScene(mainScene);
 		window.show();
-		
 	}
 	
 }

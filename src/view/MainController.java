@@ -1,6 +1,5 @@
 package view;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -29,29 +28,23 @@ public class MainController implements Initializable {
 		cbKardex.getItems().addAll(Main.getModel().nombresKardexCreados());
 	}
 	
-	public void cambiarSceneTablaKardex(ActionEvent evento) throws IOException {
-		
+	public void cambiarSceneTablaKardex(ActionEvent evento) throws Exception {
 		Main.getModel().leerArchivo(cbKardex.getSelectionModel().getSelectedItem());
-		Parent crearNuevoParent = FXMLLoader.load(getClass().getResource("TablaKardex.fxml"));
-		Scene crearNuevoScene = new Scene(crearNuevoParent);
-		
-		Stage window = (Stage)((Node)evento.getSource()).getScene().getWindow();
-		
-		window.setScene(crearNuevoScene);
-		window.show();
-		
+		cambiarScene(evento,"TablaKardex.fxml");
 	}
 	
-	public void cambiarSceneCrearNuevo(ActionEvent evento) throws IOException {
-		
-		Parent crearNuevoParent = FXMLLoader.load(getClass().getResource("CrearNuevo.fxml"));
+	public void cambiarSceneCrearNuevo(ActionEvent evento) throws Exception {
+		cambiarScene(evento,"CrearNuevo.fxml");
+	}
+	
+	private void cambiarScene(ActionEvent evento,String nombre) throws Exception{
+		Parent crearNuevoParent = FXMLLoader.load(getClass().getResource(nombre));
 		Scene crearNuevoScene = new Scene(crearNuevoParent);
 		
 		Stage window = (Stage)((Node)evento.getSource()).getScene().getWindow();
 		
 		window.setScene(crearNuevoScene);
 		window.show();
-		
 	}
 	
 }

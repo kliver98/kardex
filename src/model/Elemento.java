@@ -111,7 +111,7 @@ public class Elemento {
 	
 	public String toString() {
 	
-		return dia + "#" + descripcion + "#"+ valorUnitario + "#" + cantidadEntrada + "#"+ valorEntrada + "#" + cantidadSalida + "#" + valorSalida + "#" + cantidadSaldo + "#" + valorSaldo;
+		return dia + Kardex.SEPARADOR + descripcion + Kardex.SEPARADOR+ valorUnitario + Kardex.SEPARADOR + cantidadEntrada + Kardex.SEPARADOR+ valorEntrada + Kardex.SEPARADOR + cantidadSalida + Kardex.SEPARADOR + valorSalida + Kardex.SEPARADOR + cantidadSaldo + Kardex.SEPARADOR + valorSaldo;
 		
 	}
 

@@ -22,6 +22,7 @@ public class Kardex {
 	private static final String[] ANIOS = {"2016","2017","2018","2019","2020","2021","2022","2023","2024","2025"};
 	private static final String EXTENCION_KARDEX = ".kardex";
 	public static final String SEPARADOR = "#";
+	private PEPS peps;
 	private Archivo archivo;
 	private ArrayList<Elemento> elementos;
 	private PromedioPonderado pp;
@@ -29,6 +30,7 @@ public class Kardex {
 	
 	public Kardex() {
 		archivo = new Archivo();
+		peps = new PEPS();
 		elementos = new ArrayList<>();
 		pp = new PromedioPonderado();
 		datosPP = null;
@@ -141,6 +143,21 @@ public class Kardex {
 		return true;
 	}
 	
+	public String[][] modificarFila(String[] datos) { //ESTE ES EL QUE MODIFICA Y RECALCULA, devuelve datos para tabla
+		boolean seModifico = archivo.modificarFila(datos);
+		String[][] nDatos = null;
+		if (seModifico) {
+			//actualizo/recalculo
+			String metodo = archivo.getMetodoValoracion();
+			if (metodo.equalsIgnoreCase("PEPS")) {
+				nDatos = peps.calcular();
+			}else if (metodo.equalsIgnoreCase("PP")) {
+				nDatos = this.matrizActualizada();
+			}
+		}
+		return nDatos;
+	}
+	
 	public boolean guardarDatosRegistroKardex(String[] datos) {
 		FileWriter file = null;
         PrintWriter pw = null;
@@ -188,6 +205,7 @@ public class Kardex {
 	    			cont+=1;
 	    			continue;
 	    		}
+	    		modificarFila(datos);
 	    		cont+=1;
 	    	}
 	    	
@@ -206,11 +224,66 @@ public class Kardex {
 		
 	}
 	
+	public boolean modificarDatosBasicosArchivo(String[] nDatos) {
+		boolean seModifico = false;
+		String rutaAnt = archivo.getRutaArchivoActual();
+		crearRegistroKardex(nDatos);
+		File file = null;
+	    FileReader fr = null;
+	    BufferedReader br = null;
+
+	    FileWriter fileW = null;
+        PrintWriter pw = null;
+	    
+	    try {
+	    	file = new File (rutaAnt);
+	    	fr = new FileReader (file);
+	    	br = new BufferedReader(fr);
+	    	fileW = new FileWriter(archivo.getRutaArchivoActual());
+            pw = new PrintWriter(fileW);
+	         // Lectura del fichero
+	    	String linea;
+	    	int cont = 1;
+	    	while((linea=br.readLine())!=null) {
+	    		if (cont==1) {
+	    			cont+=1;
+	    			continue;
+	    		}
+	    		pw.print(linea);
+	    		cont+=1;
+	    	}
+	    	
+	    }
+	    catch(Exception e){
+	    	e.printStackTrace();
+	    } finally {
+	       try {                    
+	          if( null != fr ){   
+	        	  fr.close();     
+	          }
+	          if (null!=fileW)
+	        	  fileW.close();
+	       } catch (Exception e2) { 
+	    	   e2.printStackTrace();
+	       }
+	    }
+		return seModifico;
+	}
+	
+	public boolean borrarArchivo() {
+		File file = new File(archivo.getRutaArchivoActual());
+		return file.delete();
+	}
+	
 	private void setDatosArchivo(String[] datos) {
 		archivo = new Archivo();
 		archivo.setDatos(datos);
 		String nombreEmpresa = datos[0];
 		String metodo = datos[1].split(" - ")[0];
+		if (metodo.equalsIgnoreCase("PEPS")) //Relaciono datos del archivo con metodo peps
+			peps.setDatos(archivo.getDatos());
+		else if (metodo.equalsIgnoreCase("PP")) //**Relacionar con PP
+			System.out.println("Hacer por pp");
 		String periodo = datos[2].split("/")[0]+"_"+datos[2].split("/")[1];
 		String articulo = datos[3];
 		archivo.setNombreArchivo(nombreEmpresa+"_"+metodo+"_"+articulo+"_"+periodo+EXTENCION_KARDEX);
@@ -241,6 +314,10 @@ public class Kardex {
 		return archivo.getDatosCabeceraKardex();
 	}
 	
+	public String[] getDatosBasicosArchivo() {
+		return archivo.getDatosCompletos();
+	}
+	
 	public void cerrarArchivo() {
 		archivo = new Archivo();
 	}
@@ -254,6 +331,7 @@ public class Kardex {
 		}
 		return new String[][]{MESES,a};
 	}
+
 	
 	public ArrayList<Elemento> getElementos() {
 		return elementos;
@@ -318,5 +396,7 @@ public class Kardex {
 		return matriz;
 	}
 	
-	
+	public boolean esPEPS() {
+		return archivo.getMetodoValoracion().split(" - ")[0].equals("PEPS");
+	}
 }
