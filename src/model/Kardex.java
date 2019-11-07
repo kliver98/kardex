@@ -267,7 +267,13 @@ public class Kardex {
 		this.pp = pp;
 	}
 	
-	public void addDatos(String dia, String descripcion, int cantidad, double valorU) {
+	public void addDatos(String[] datos) {
+		
+		//String dia, String descripcion, int cantidad, double valorU
+		String dia = datos[0];
+		String descripcion = datos[1];
+		double valorU = Double.parseDouble(datos[2]);
+		int cantidad = Integer.parseInt(datos[3]);
 		
 		if(valorU != 0 && cantidad != 0){
 			Elemento agregar  = new Elemento(dia, descripcion, valorU, cantidad, 0, 0, 0, 0,0);		
