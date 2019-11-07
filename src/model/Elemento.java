@@ -105,5 +105,7 @@ public class Elemento {
 		return dia + "#" + descripcion + "#"+ valorUnitario + "#" + cantidadEntrada + "#"+ valorEntrada + "#" + cantidadSalida + "#" + valorSalida + "#" + cantidadSaldo + "#" + valorSaldo;
 		
 	}
+
+	
   
 }

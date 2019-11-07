@@ -7,6 +7,7 @@ import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 public class Kardex {
 
@@ -21,9 +22,13 @@ public class Kardex {
 	private static final String EXTENCION_KARDEX = ".kardex";
 	public static final String SEPARADOR = "#";
 	private Archivo archivo;
+	private ArrayList<Elemento> elementos;
+	private PromedioPonderado pp;
 	
 	public Kardex() {
 		archivo = new Archivo();
+		elementos = new ArrayList<>();
+		pp = new PromedioPonderado();
 	}
 	
 	public String[] nombresKardexCreados() {
@@ -245,5 +250,43 @@ public class Kardex {
 		}
 		return new String[][]{MESES,a};
 	}
+	
+	public ArrayList<Elemento> getElementos() {
+		return elementos;
+	}
+
+	public void setElementos(ArrayList<Elemento> elementos) {
+		this.elementos = elementos;
+	}
+
+	public PromedioPonderado getPp() {
+		return pp;
+	}
+
+	public void setPp(PromedioPonderado pp) {
+		this.pp = pp;
+	}
+	
+	public void addDatos(String dia, String descripcion, int cantidad, double valorU) {
+		
+		if(descripcion.equalsIgnoreCase("Compra") || descripcion.equalsIgnoreCase("Devoluciones") ){
+			Elemento agregar  = new Elemento(dia, descripcion, valorU, cantidad, 0, 0, 0, 0,0);
+			
+			elementos.add(agregar);
+			System.out.println(elementos.size() + ">>>>>>>>>>>> size Elemento");
+		}else {
+			Elemento agregar  = new Elemento(dia, descripcion, valorU, 0, 0, cantidad, 0, 0,0);
+			elementos.add(agregar);
+		}
+				
+	}
+	
+	public String[][] matrizActualizada(){
+		
+		String[][] matriz = pp.lecturaDatos(elementos);
+		
+		return matriz;
+	}
+	
 	
 }
