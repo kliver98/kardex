@@ -18,11 +18,14 @@ public class PromedioPonderado {
 
 		while( i < datos.size() && actual != null) {	
 		
-				if (actual.noEsVenta()) {
+				if (actual.esCompra()) {
 					compraPP(actual);
 					
 					
-				} else {
+				} else if(actual.esVenta()) {
+					ventaPP(actual);
+				}
+				else if(actual.esDevolucion()) {
 					ventaPP(actual);
 				}
 				

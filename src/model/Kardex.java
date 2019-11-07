@@ -269,16 +269,34 @@ public class Kardex {
 	
 	public void addDatos(String dia, String descripcion, int cantidad, double valorU) {
 		
-		if(descripcion.equalsIgnoreCase("Compra") || descripcion.equalsIgnoreCase("Devoluciones") ){
-			Elemento agregar  = new Elemento(dia, descripcion, valorU, cantidad, 0, 0, 0, 0,0);
-			
+		if(valorU != 0 && cantidad != 0){
+			Elemento agregar  = new Elemento(dia, descripcion, valorU, cantidad, 0, 0, 0, 0,0);		
 			elementos.add(agregar);
-			System.out.println(elementos.size() + ">>>>>>>>>>>> size Elemento");
-		}else {
+		}else if(valorU == 0 && cantidad != 0) {
 			Elemento agregar  = new Elemento(dia, descripcion, valorU, 0, 0, cantidad, 0, 0,0);
+			elementos.add(agregar);
+		}else {
+			Elemento agregar = search(dia);
+			int cant = agregar.getCantidadSalida();
+			agregar.setCantidadSalida(cant*-1);
 			elementos.add(agregar);
 		}
 				
+				
+	}
+	
+	public Elemento search(String dia) {
+		
+		Elemento search = null;
+		boolean encontrado = false;
+		int i = 0;
+		while(i < elementos.size() && encontrado == false) {
+			if(elementos.get(i).getDia().equals(dia)) {
+				search = elementos.get(i);
+				encontrado = true;
+			}
+		}	
+		return search;
 	}
 	
 	public String[][] matrizActualizada(){
