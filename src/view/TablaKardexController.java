@@ -124,37 +124,43 @@ public class TablaKardexController implements Initializable {
 			tfCantidad.setEditable(true);
 			tfDescripcion.setEditable(true);
 		} else if (item.equalsIgnoreCase(tiposModificaciones[1])) {
-			tfValor.setText("");
 			tfValor.setEditable(false);
+			tfValor.setText("");
 			tfDia.setEditable(true);
 			tfCantidad.setEditable(true);
 			tfDescripcion.setEditable(true);
 		} else if (item.equalsIgnoreCase(tiposModificaciones[2])) {
 			tfDia.setEditable(true);
 			tfValor.setEditable(false);
-			tfValor.setText("");
-			tfCantidad.setText("");
 			tfCantidad.setEditable(false);
 			tfDescripcion.setEditable(false);
+			tfValor.setText("");
+			tfCantidad.setText("");
+			tfDescripcion.setText("");
 		}
 	}
 	
 	public void btnModificarTabla(ActionEvent evento) { //Aqui se da compra-venta-devolucion
+		if (cbTipoModificacion.getSelectionModel().getSelectedItem()==null) {
+			mensajeError();
+			return;
+		}
 		boolean c = cbTipoModificacion.getSelectionModel().getSelectedItem().split(" ")[1].equals("C");
 		String[] datos = new String[] {tfDia.getText(),tfDescripcion.getText(),tfValor.getText(),tfCantidad.getText(),"0","0",
 				"0","0","0"}; //Estoy comprando
 		datos = c ? datos:new String[] {tfDia.getText(),tfDescripcion.getText(),"0","0","0",tfCantidad.getText(),
 				"0","0","0"}; //Estoy vendiendo
-		datos = !cbTipoModificacion.getSelectionModel().getSelectedItem().split(" ")[1].equalsIgnoreCase("D") ? datos : new String[] {tfDia.getText(),"D","","","","","","",""};
-		String[][] matrix = Main.getModel().modificarFila(datos);
-		
-		if (matrix==null)
+		datos = !cbTipoModificacion.getSelectionModel().getSelectedItem().split(" ")[1].equalsIgnoreCase("D") ? datos : new String[] {tfDia.getText(),"","D","0","0","0","0","0","0"};
+		String[][] matriz = Main.getModel().modificarFila(datos);
+		if (matriz==null) {
+			mensajeError();
 			return;
+		}
 		tabla.getItems().clear();
-		for (int i = 0; i < matrix.length; i++) {
+		for (int i = 0; i < matriz.length; i++) {
 			String[] aux = new String[9];
-			for (int j = 0; j < matrix[i].length; j++) {
-				aux[j] = matrix[i][j];
+			for (int j = 0; j < matriz[i].length; j++) {
+				aux[j] = matriz[i][j];
 			}			
 			tabla.getItems().add(new DatosModel(aux[0],aux[1],aux[2],aux[3],aux[4],aux[5],aux[6],aux[7],aux[8]));
 		}
@@ -177,7 +183,7 @@ public class TablaKardexController implements Initializable {
 			if (id!=null && !id.trim().equals(""))
 				cambiarSceneModificarRegistro(evento);
 		} catch (Exception e) {
-			mensaje("Error","Ha ocurrido un error, por favor vuelva a intentarlo.",AlertType.ERROR);
+			mensajeError();
 		}
 	}
 	
@@ -195,6 +201,10 @@ public class TablaKardexController implements Initializable {
 			return null;
 		}
 		return r;
+	}
+	
+	public void mensajeError() {
+		mensaje("Error","Ha ocurrido un error, por favor vuelva a intentarlo.",AlertType.ERROR);
 	}
 	
 	public void mensajeCreditos() {

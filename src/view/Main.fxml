@@ -27,7 +27,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label text="Bienvenido/a" wrapText="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                  <Label styleClass="label-header" text="Bienvenido/a" wrapText="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <font>
                         <Font name="System Bold" size="30.0" />
                      </font>
@@ -35,7 +35,7 @@
                         <Insets top="20.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label text="Este software le permite administrar el inventario por medio de" textAlignment="CENTER" textFill="#515151" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                  <Label styleClass="label-bright" text="Este software le permite administrar el inventario por medio de" textAlignment="CENTER" textFill="#515151" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -43,7 +43,7 @@
                         <Insets top="20.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label text="Seleccione una de las opciones mostradas abajo" textFill="#ff6666" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                  <Label styleClass="label-bright" text="Seleccione una de las opciones mostradas abajo" textFill="#ff6666" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -51,7 +51,7 @@
                         <Insets top="5.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label text="Promedio Ponderado o Primeras en Entrar Primeras en Salir" textAlignment="CENTER" textFill="#515151" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                  <Label styleClass="label-bright" text="Promedio Ponderado o Primeras en Entrar Primeras en Salir" textAlignment="CENTER" textFill="#515151" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -73,7 +73,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Separator orientation="VERTICAL" prefHeight="218.0" prefWidth="0.0" GridPane.columnIndex="1" />
+                  <Separator orientation="VERTICAL" prefHeight="218.0" prefWidth="0.0" styleClass="split-pane-divider" GridPane.columnIndex="1" />
                   <GridPane>
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -83,7 +83,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label text="Seleccionar Kardex Creado" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                        <Label styleClass="labelBlack" text="Seleccionar Kardex Creado" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -106,7 +106,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label text="Crear Nuevo Kardex" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                        <Label styleClass="labelBlack" text="Crear Nuevo Kardex" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                            <font>
                               <Font size="14.0" />
                            </font>

@@ -16,7 +16,7 @@
    <children>
       <BorderPane prefHeight="600.0" prefWidth="600.0">
          <top>
-            <Label text="Información básica del Archivo" textAlignment="CENTER" underline="true" wrapText="true" BorderPane.alignment="CENTER_LEFT">
+            <Label text="Información básica del Archivo" textAlignment="CENTER" textFill="#cc6666" underline="true" wrapText="true" BorderPane.alignment="CENTER_LEFT">
                <font>
                   <Font name="System Bold" size="32.0" />
                </font>
@@ -125,7 +125,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="btnRegresar" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#cambiarSceneTablaKardex" prefHeight="26.0" prefWidth="92.0" text="Regresar" />
+                  <Button fx:id="btnRegresar" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="26.0" prefWidth="92.0" text="Regresar" />
                </children>
             </GridPane>
          </bottom>

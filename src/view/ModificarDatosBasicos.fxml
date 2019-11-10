@@ -16,7 +16,7 @@
    <children>
       <BorderPane prefHeight="600.0" prefWidth="600.0">
          <top>
-            <Label text="Modificar información básica" textAlignment="CENTER" underline="true" wrapText="true" BorderPane.alignment="CENTER_LEFT">
+            <Label text="Modificar información básica" textAlignment="CENTER" textFill="#cc6666" underline="true" wrapText="true" BorderPane.alignment="CENTER_LEFT">
                <font>
                   <Font name="System Bold" size="32.0" />
                </font>

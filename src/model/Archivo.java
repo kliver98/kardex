@@ -15,48 +15,10 @@ public class Archivo {
 	private Integer cantMinima;
 	private Integer cantMaxima;
 	private String comentario;
-	private TreeMap<Integer,Elemento> datos;
+	private TreeMap<Integer,Registro> datos;
 	
 	public Archivo() {
-		datos = new TreeMap<Integer,Elemento>();
-	}
-	
-	private boolean verificarDatos(String[] datos) {
-		try {
-			Integer.parseInt(datos[0]);
-			Double.parseDouble(datos[2]);
-			if (!datos[3].equalsIgnoreCase(""))
-				Integer.parseInt(datos[3]);
-			else if (!datos[5].equalsIgnoreCase(""))
-				Integer.parseInt(datos[5]);
-		} catch(Exception e) {
-			return false;
-		}
-		return true;
-	}
-	
-	public boolean modificarFila(String[] datos) {
-		if (datos[1].equalsIgnoreCase("D")) { //hago una copia de datos, calculo con los que no elimino. Si hay error, regreso datos como estaban
-			TreeMap<Integer,Elemento> copy = (TreeMap<Integer, Elemento>) this.datos.clone();
-			try {
-				int dia = Integer.parseInt(datos[0]);
-				this.datos.remove(dia);
-				
-			} catch (Exception e) {
-				this.datos = copy;
-				return false;
-			}
-			return true;
-		}
-		if (!verificarDatos(datos) && datos[5].equals(""))
-			return false;
-		boolean entry = !datos[3].equalsIgnoreCase("0");
-		if (entry) //Compra. AGrego valor calculado si es de compra (valor unit*cant)
-			datos[4] = (Integer.parseInt(datos[3])*Double.parseDouble(datos[2]))+"";
-		this.datos.put(Integer.parseInt(datos[0]), new Elemento(datos[0],datos[1],Double.parseDouble(datos[2]),
-				Integer.parseInt(datos[3]),Double.parseDouble(datos[4]),Integer.parseInt(datos[5]),Double.parseDouble(datos[6]),
-				Integer.parseInt(datos[7]),Double.parseDouble(datos[8])));
-		return true;
+		datos = new TreeMap<Integer,Registro>();
 	}
 	
 	public void setDatos(String[] datos) {
@@ -71,9 +33,9 @@ public class Archivo {
 		comentario = datos.length>8 ? datos[8]:"";
 	}
 	
-	public boolean eliminarRegistro(int dia) {
-		datos.remove(dia);
-		return !datos.containsKey(dia);
+	public boolean eliminarRegistro(Integer key) {
+		datos.remove(key);
+		return !datos.containsKey(key);
 	}
 	
 	public String[] getDatosCabeceraKardex() {
@@ -100,12 +62,16 @@ public class Archivo {
 		return nombreArchivo;
 	}
 	
-	public TreeMap<Integer,Elemento> getDatos() {
+	public TreeMap<Integer,Registro> getDatos() {
 		return datos;
 	}
 	
 	public String getMetodoValoracion() {
 		return metodoValoracion.split(" - ")[0];
+	}
+	
+	public boolean esMetodoPEPS() {
+		return getMetodoValoracion().equalsIgnoreCase("PEPS");
 	}
 	
 }
