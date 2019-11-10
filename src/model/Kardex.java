@@ -147,51 +147,38 @@ public class Kardex {
 		return true;
 	}
 	
-	public void leerArchivo(String ruta) {
+	public void leerArchivo(String ruta) throws Exception {
 		
 		File file = null;
 	    FileReader fr = null;
 	    BufferedReader br = null;
+	    ruta = CARPETA+"\\resources\\data\\"+ruta;
+	    file = new File (ruta);
+	    fr = new FileReader (file);
+	    br = new BufferedReader(fr);
 
-	    try {
-	    	ruta = CARPETA+"\\resources\\data\\"+ruta;
-	    	file = new File (ruta);
-	    	fr = new FileReader (file);
-	    	br = new BufferedReader(fr);
-
-	         // Lectura del fichero
-	    	String linea;
-	    	int cont = 1;
-	    	while((linea=br.readLine())!=null) {
-	    		String[] datos = linea.split(SEPARADOR);
-	    		if (cont==1) {	    			
-	    			setDatosArchivo(datos);
-	    			cont+=1;
-	    			continue;
-	    		}
-	    		modificarFila(datos);
+	        // Lectura del fichero
+	    String linea;
+	    int cont = 1;
+	    while((linea=br.readLine())!=null) {
+	    	String[] datos = linea.split(SEPARADOR);
+	    	if (cont==1) {	    			
+	    		setDatosArchivo(datos);
 	    		cont+=1;
+	    		continue;
 	    	}
-	    	metodo.setDatos(archivo.getDatos());
+	    	modificarFila(datos);
+	    	cont+=1;
 	    }
-	    catch(Exception e){
-	    	e.printStackTrace();
-	    } finally {
-	       try {                    
-	          if( null != fr ){   
-	        	  fr.close();     
-	          }                  
-	       } catch (Exception e2) { 
-	    	   e2.printStackTrace();
-	       }
-	    }
+	    metodo.setDatos(archivo.getDatos());
+	    br.close();	
+	    fr.close();
 		
 	}
 	
 	public boolean modificarDatosBasicosArchivo(String[] nDatos) {
 		boolean seModifico = false;
 		String rutaAnt = archivo.getRutaArchivoActual();
-		crearRegistroKardex(nDatos);
 		File file = null;
 	    FileReader fr = null;
 	    BufferedReader br = null;

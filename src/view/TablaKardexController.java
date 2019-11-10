@@ -5,8 +5,6 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class TablaKardexController implements Initializable {
@@ -75,7 +74,6 @@ public class TablaKardexController implements Initializable {
     public TableColumn<DatosModel, String> cantSaldo;
 	@FXML
     public TableColumn<DatosModel, String> valorSaldo;
-	private ObservableList<DatosModel> tablaModel = FXCollections.observableArrayList();
 	private String datosCabecera[];//empresa-metodo-periodo-articulo-unidad-proovedor-cantMin-cantMax-comentario
 	
 	public TablaKardexController() {
@@ -102,7 +100,7 @@ public class TablaKardexController implements Initializable {
 		try {			
 			datosCabecera = Main.getModel().getDatosCabeceraKardex();
 		} catch(Exception e) {
-			mensaje("Error","Ocurrio un error.",AlertType.ERROR);
+			mensaje("Error","Ocurrio un error al cargar los datos de la cabecera de la tabla.",AlertType.ERROR);
 			return;
 		}
 		lblEmpresa.setText("Nombre de la empresa: "+datosCabecera[0]);
@@ -142,9 +140,9 @@ public class TablaKardexController implements Initializable {
 	
 	public void btnModificarTabla(ActionEvent evento) { //Aqui se da compra-venta-devolucion
 		if (cbTipoModificacion.getSelectionModel().getSelectedItem()==null) {
-			mensajeError();
+			mensaje("Error","Debe seleccionar una operación [COMPRA-VENTA-DEVOLUCIÓN].",AlertType.ERROR);
 			return;
-		}
+		} 
 		boolean c = cbTipoModificacion.getSelectionModel().getSelectedItem().split(" ")[1].equals("C");
 		String[] datos = new String[] {tfDia.getText(),tfDescripcion.getText(),tfValor.getText(),tfCantidad.getText(),"0","0",
 				"0","0","0"}; //Estoy comprando
@@ -153,7 +151,7 @@ public class TablaKardexController implements Initializable {
 		datos = !cbTipoModificacion.getSelectionModel().getSelectedItem().split(" ")[1].equalsIgnoreCase("D") ? datos : new String[] {tfDia.getText(),"","D","0","0","0","0","0","0"};
 		String[][] matriz = Main.getModel().modificarFila(datos);
 		if (matriz==null) {
-			mensajeError();
+			mensaje("Error","Ocurrio un error y no hay datos para mostrar en la tabla. Intente de nuevo o vaya a la pestaña ayuda.",AlertType.ERROR);
 			return;
 		}
 		tabla.getItems().clear();
@@ -166,24 +164,14 @@ public class TablaKardexController implements Initializable {
 		}
 	}
 	
-	public void corregirRegistro(ActionEvent evento) {
-		String id = getRespuestaPopUp("Corregir registro","Introduzca el identificador del registro del kardex.");
-		try {
-			if (id!=null && !id.trim().equals(""))
-				cambiarSceneModificarRegistro(evento);
-		} catch (Exception e) {
-			mensaje("Error","Ha ocurrido un error, por favor vuelva a intentarlo.",AlertType.ERROR);
-		}
-		
-	}
-	
 	public void eliminarRegistro(ActionEvent evento) {
-		String id = getRespuestaPopUp("Eliminar Registro","Introduzca el identificador del registro del kardex.");
+		String id = getRespuestaPopUp("Eliminar Registro","Introduzca el identificador [Día] del registro del kardex.").trim();
 		try {
-			if (id!=null && !id.trim().equals(""))
-				cambiarSceneModificarRegistro(evento);
+			Integer.parseInt(id);
+			if (!id.equals(""))
+				System.out.println("Debo hacer funcionalidad para eliminar registro.");
 		} catch (Exception e) {
-			mensajeError();
+			mensaje("Error","El identificador no es válido.",AlertType.ERROR);
 		}
 	}
 	
@@ -203,12 +191,8 @@ public class TablaKardexController implements Initializable {
 		return r;
 	}
 	
-	public void mensajeError() {
-		mensaje("Error","Ha ocurrido un error, por favor vuelva a intentarlo.",AlertType.ERROR);
-	}
-	
 	public void mensajeCreditos() {
-		mensaje("Crédtios...","Este software ha sido desarrollado por Fanny & Kliver - kliver1998@hotmail.com",AlertType.INFORMATION);
+		mensaje("Crédtios...","Este software ha sido desarrollado por Fanny & Kliver - Sugerencias o inquietudes: kliver1998@hotmail.com",AlertType.INFORMATION);
 	}
 	
 	public void mensajeAyuda() {
@@ -237,10 +221,6 @@ public class TablaKardexController implements Initializable {
 	
 	private void cambiarSceneMain(ActionEvent evento) throws IOException {
 		cambiarScene(evento,"Main.fxml");
-	}
-	
-	public void cambiarSceneModificarRegistro(ActionEvent evento) throws IOException {
-		
 	}
 	
 	public void cambiarSceneModificarDatosBasicos(ActionEvent evento) throws IOException {
@@ -280,13 +260,13 @@ public class TablaKardexController implements Initializable {
 		
 	}
 	
-	
-	public ObservableList<DatosModel> getTablaModel() {
-		return tablaModel;
-	}
-
-	public void setTablaModel(ObservableList<DatosModel> tablaModel) {
-		this.tablaModel = tablaModel;
+	public void editarFila(MouseEvent e) { //Funcionalidad para implementar, mostrar ventana para editar info y ver completa la info
+//		int c = e.getClickCount(); //Si es 2 mostrar pantalla editar info
+//		System.out.println("Click count: "+c);
+//		DatosModel item = tabla.getSelectionModel().getSelectedItem();
+//		if (item==null)
+//			return;
+//		System.out.println(item.toString());
 	}
 
 	public void exit() {
