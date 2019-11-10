@@ -7,6 +7,7 @@ import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.LinkedList;
 
 public class Kardex {
 
@@ -95,7 +96,7 @@ public class Kardex {
 	        	bw.close();
 	        	guardarDatosRegistroKardex(datos);
 	        } else
-	        	throw new Exception();	        	
+	        	return false;	        	
 		} catch(Exception e) { //No lo pudo crear
 			cerrarArchivo();
 			return false;
@@ -176,53 +177,53 @@ public class Kardex {
 		
 	}
 	
-	public boolean modificarDatosBasicosArchivo(String[] nDatos) {
-		boolean seModifico = false;
-		String rutaAnt = archivo.getRutaArchivoActual();
+	private LinkedList<String> leerArchivoLista() throws Exception {
 		File file = null;
 	    FileReader fr = null;
 	    BufferedReader br = null;
-
-	    FileWriter fileW = null;
-        PrintWriter pw = null;
+	    LinkedList<String> copy = new LinkedList<String>();
 	    
-	    try {
-	    	file = new File (rutaAnt);
-	    	fr = new FileReader (file);
-	    	br = new BufferedReader(fr);
-	    	fileW = new FileWriter(archivo.getRutaArchivoActual());
-            pw = new PrintWriter(fileW);
-	         // Lectura del fichero
-	    	String linea;
-	    	int cont = 1;
-	    	while((linea=br.readLine())!=null) {
-	    		if (cont==1) {
-	    			cont+=1;
-	    			continue;
-	    		}
-	    		pw.print(linea);
-	    		cont+=1;
-	    	}
-	    	
-	    }
-	    catch(Exception e){
-	    	e.printStackTrace();
-	    } finally {
-	       try {                    
-	          if( null != fr ){   
-	        	  fr.close();     
-	          }
-	          if (null!=fileW)
-	        	  fileW.close();
-	       } catch (Exception e2) { 
-	    	   e2.printStackTrace();
-	       }
-	    }
-		return seModifico;
+	    file = new File (archivo.getRutaArchivoActual());
+	    fr = new FileReader (file);
+	    br = new BufferedReader(fr);
+	    // Lectura del fichero
+	    String linea;
+	    while((linea=br.readLine())!=null)
+	    	copy.add(linea);
+	    copy.poll();
+	    fr.close();
+	    br.close();
+	    return copy;
 	}
 	
-	public boolean borrarArchivo() {
-		File file = new File(archivo.getRutaArchivoActual());
+	public void modificarDatosBasicosArchivo(String[] nDatos) throws Exception {
+		String rutaAnt = archivo.getRutaArchivoActual();
+		LinkedList<String> copy = leerArchivoLista();
+		FileWriter file = null;
+        PrintWriter pw = null;
+        file = new FileWriter(archivo.getRutaArchivoActual(),false);
+        pw = new PrintWriter(file);
+        if (!crearRegistroKardex(nDatos)) { //Tengo que borrar los registro que hay
+        	String aux = obtenerString(nDatos);
+        	pw.print(aux);
+        	pw.close();
+        	file.close();
+        } else {
+        	file.close();
+        	borrarArchivo(rutaAnt);
+        }
+        file = new FileWriter(archivo.getRutaArchivoActual(),true);
+        pw = new PrintWriter(file);
+        while (!copy.isEmpty()) {
+        	pw.print(copy.poll());
+        }
+        pw.close();
+        file.close();
+        System.out.println(rutaAnt+"\n"+archivo.getRutaArchivoActual());
+	}
+	
+	public boolean borrarArchivo(String ruta) {
+		File file = new File(ruta.equals("") ? archivo.getRutaArchivoActual():ruta);
 		return file.delete();
 	}
 	

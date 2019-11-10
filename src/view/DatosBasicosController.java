@@ -78,9 +78,12 @@ public class DatosBasicosController implements Initializable {
 				cbMes.getSelectionModel().getSelectedItem()+"/"+cbAnio.getSelectionModel().getSelectedItem(),
 				tfArticulo.getText(), tfUnidad.getText(), tfProovedor.getText(), tfMin.getText(), tfMax.getText(),
 				tfComentario.getText()};
-		boolean seModifico = Main.getModel().modificarDatosBasicosArchivo(datos);
-		if (!seModifico)
+		try {
+			Main.getModel().modificarDatosBasicosArchivo(datos);
+			cambiarSceneTablaKardex(evento);
+		} catch(Exception e) {			
 			mensajePopUp("Error","No se pudo modificar el archivo",AlertType.ERROR);
+		}
 	}
 
 	public void cambiarSceneTablaKardex(ActionEvent evento) throws Exception {

@@ -243,10 +243,17 @@ public class TablaKardexController implements Initializable {
 		
 	}
 	
-	public void borrarArchivo() {
-		boolean borrado = Main.getModel().borrarArchivo();
+	public void borrarArchivo(ActionEvent evento) throws Exception {
+		String res = getRespuestaPopUp("Eliminar el archivo ","Escriba \"si\" para eliminar. Sin comillas.");
+		if (res==null || !res.equalsIgnoreCase("si"))
+			return;
+		boolean borrado = Main.getModel().borrarArchivo("");//Vacio significa que borre el archivo con el que se esta trabajando
 		if (!borrado)
 			mensaje("Error al borrar","No se pudo borrar el archivo.",AlertType.ERROR);
+		else {
+			mensaje("Confirmación","El archivo fue eliminado exitosamente.",AlertType.CONFIRMATION);
+			cambiarSceneMain(evento);
+		}
 	}
 	
 	public void cerrarArchivo(ActionEvent evento) {
@@ -269,6 +276,10 @@ public class TablaKardexController implements Initializable {
 //		System.out.println(item.toString());
 	}
 
+	public void guardarCambios(ActionEvent evento) {
+		
+	}
+	
 	public void exit() {
 		System.exit(0);
 	}

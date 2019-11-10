@@ -28,14 +28,14 @@
               <menus>
                 <Menu mnemonicParsing="false" text="Archivo">
                   <items>
-                        <MenuItem mnemonicParsing="false" text="Borrar archivo" />
+                        <MenuItem mnemonicParsing="false" onAction="#borrarArchivo" text="Borrar archivo" />
                     <MenuItem mnemonicParsing="false" onAction="#cambiarSceneModificarDatosBasicos" text="Cambiar información básica" />
-                        <MenuItem mnemonicParsing="false" text="Guardar cambios" />
+                        <MenuItem mnemonicParsing="false" onAction="#guardarCambios" text="Guardar cambios" />
                         <MenuItem mnemonicParsing="false" onAction="#cambiarSceneVistaDatosBasicos" text="Mostrar información básica" />
                         <MenuItem mnemonicParsing="false" onAction="#cerrarArchivo" text="Cerrar" />
                   </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Editar">
+                <Menu mnemonicParsing="false" text="Editar" visible="false">
                   <items>
                         <MenuItem mnemonicParsing="false" text="Corregir registro" />
                         <MenuItem mnemonicParsing="false" text="Eliminar registro" />
