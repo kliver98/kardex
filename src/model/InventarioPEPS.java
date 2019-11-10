@@ -46,8 +46,12 @@ public class InventarioPEPS {
 		cantidadTotal-=cantidad;
 		double precio = 0;
 		Par aux = inventario.peek();
+		if (inventario.isEmpty()) {
+			saldoTotal-=precio;
+			return -1;
+		}
 		int resta = aux.getCantidad()-cantidad;
-		if (resta>0) {
+		if (resta>=0) {
 			aux.setCantidad(resta);
 			precio = cantidad*aux.getValor();
 			saldoTotal-=precio;
@@ -57,6 +61,10 @@ public class InventarioPEPS {
 			precio += aux.getCantidad()*aux.getValor();
 			inventario.poll();
 			aux = inventario.peek();
+			if (inventario.isEmpty()) {
+				saldoTotal-=precio;
+				return -1;
+			}
 			resta = aux.getCantidad()+resta;
 			if (resta>=0) {
 				precio += aux.getValor()*(+aux.getCantidad()-resta);

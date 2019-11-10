@@ -117,21 +117,21 @@ public class TablaKardexController implements Initializable {
 		String item = cbTipoModificacion.getSelectionModel().getSelectedItem();
 		String[] tiposModificaciones = Main.getModel().getTiposModificaciones();
 		if (item.equalsIgnoreCase(tiposModificaciones[0])) {
-			tfValor.setEditable(true);
-			tfDia.setEditable(true);
-			tfCantidad.setEditable(true);
-			tfDescripcion.setEditable(true);
+			tfValor.setDisable(false);
+			tfDia.setDisable(false);
+			tfCantidad.setDisable(false);
+			tfDescripcion.setDisable(false);
 		} else if (item.equalsIgnoreCase(tiposModificaciones[1])) {
-			tfValor.setEditable(false);
+			tfValor.setDisable(true);
 			tfValor.setText("");
-			tfDia.setEditable(true);
-			tfCantidad.setEditable(true);
-			tfDescripcion.setEditable(true);
+			tfDia.setDisable(false);
+			tfCantidad.setDisable(false);
+			tfDescripcion.setDisable(false);
 		} else if (item.equalsIgnoreCase(tiposModificaciones[2])) {
-			tfDia.setEditable(true);
-			tfValor.setEditable(false);
-			tfCantidad.setEditable(false);
-			tfDescripcion.setEditable(false);
+			tfDia.setDisable(false);
+			tfValor.setDisable(true);
+			tfCantidad.setDisable(true);
+			tfDescripcion.setDisable(true);
 			tfValor.setText("");
 			tfCantidad.setText("");
 			tfDescripcion.setText("");
@@ -150,15 +150,22 @@ public class TablaKardexController implements Initializable {
 				"0","0","0"}; //Estoy vendiendo
 		datos = !cbTipoModificacion.getSelectionModel().getSelectedItem().split(" ")[1].equalsIgnoreCase("D") ? datos : new String[] {tfDia.getText(),"","D","0","0","0","0","0","0"};
 		String[][] matriz = Main.getModel().modificarFila(datos);
-		if (matriz==null) {
-			mensaje("Error","Ocurrio un error y no hay datos para mostrar en la tabla. Intente de nuevo o vaya a la pestaña ayuda.",AlertType.ERROR);
+		if (matriz==null) { //Este mesaje se muestra cuando los datos no estan correctamente llenados
+			mensaje("Error de entradas","Ocurrio un error, verifique que ingreso todos los datos necesarios en su formato correcto.",AlertType.ERROR);
+			return;
+		} else if (matriz.length==0) { //Este mensaje se meustra cuando no hay inventario suficiente para hacer la compra
+			mensaje("Error de Inventario","No hay suficiente productos en el inventario para realizar la venta.",AlertType.WARNING);
 			return;
 		}
+		setDatosEnTabla(matriz);
+	}
+	
+	private void setDatosEnTabla(String[][] datos) {
 		tabla.getItems().clear();
-		for (int i = 0; i < matriz.length; i++) {
+		for (int i = 0; i < datos.length; i++) {
 			String[] aux = new String[9];
-			for (int j = 0; j < matriz[i].length; j++) {
-				aux[j] = matriz[i][j];
+			for (int j = 0; j < datos[i].length; j++) {
+				aux[j] = datos[i][j];
 			}			
 			tabla.getItems().add(new DatosModel(aux[0],aux[1],aux[2],aux[3],aux[4],aux[5],aux[6],aux[7],aux[8]));
 		}

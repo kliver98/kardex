@@ -118,9 +118,15 @@ public class PEPS implements Metodo {
 				r.setValorEntrada(r.getValorUnitario()*r.getCantidadEntrada());
 			} else if (tipoRegistro=='V') { // Son datos para una salida
 				double precioC = inv.sacarProductos(r.getCantidadSalida());
+				if (precioC==-1) {
+					revertirDatos(copy);
+					return new String[][] {};
+				}
+				else {
 				r.setCantidadSaldo(inv.getCantidadDisponible());
 				r.setValorSaldo(inv.getSaldo());
 				r.setValorSalida(precioC);
+				}
 			} else if (tipoRegistro=='D') {
 				registrarDevolucion(r,inv,copyD);
 			}
