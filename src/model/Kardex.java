@@ -7,7 +7,9 @@ import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.TreeMap;
 
 public class Kardex {
 	
@@ -124,6 +126,34 @@ public class Kardex {
 		return metodo.calcularKardex(datos);
 	}
 	
+	public boolean guardarCambios() {
+		FileWriter file = null;
+        PrintWriter pw = null;
+        try {
+        	file = new FileWriter(archivo.getRutaArchivoActual());
+            pw = new PrintWriter(file);
+            
+            pw.print(obtenerString(archivo.getDatosCompletos())+"\n");
+            TreeMap<Integer,Registro>  d = archivo.getDatos();
+            Iterator<Integer> it = d.keySet().iterator();
+            while (it.hasNext()) {
+            	String guardar = d.get(it.next()).toString();            	
+            	pw.print(guardar);
+            }
+            pw.close();
+        } catch (Exception e) {
+            return false;
+        } finally {
+           try {
+           if (null != file)
+        	   file.close();
+           } catch (Exception e2) {
+              return false;
+           }
+        }
+		return true;
+	}
+	
 	public boolean guardarDatosRegistroKardex(String[] datos) {
 		FileWriter file = null;
         PrintWriter pw = null;
@@ -133,7 +163,7 @@ public class Kardex {
             
             //Debe hacer calculos de nuevo por que puede agregar registros intermedios
             String guardar = obtenerString(datos);
-            pw.print(guardar);
+            pw.print(guardar+"\n");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -146,6 +176,15 @@ public class Kardex {
            }
         }
 		return true;
+	}
+	
+	public String[][] obtenerMatrizInicial() {
+		try {			
+			String[] linea = archivo.getDatos().get(archivo.getDatos().keySet().iterator().next()).toString().split(SEPARADOR);
+			return modificarFila(linea);
+		} catch(Exception e ) {
+			return null;
+		}
 	}
 	
 	public void leerArchivo(String ruta) throws Exception {
@@ -168,13 +207,12 @@ public class Kardex {
 	    		cont+=1;
 	    		continue;
 	    	}
-	    	modificarFila(datos);
+	    	archivo.getDatos().put(Integer.parseInt(datos[0]),new Registro(datos[0],datos[1],datos[2],datos[3],datos[4],datos[5],datos[6],datos[7],datos[8]));
 	    	cont+=1;
 	    }
 	    metodo.setDatos(archivo.getDatos());
 	    br.close();	
 	    fr.close();
-		
 	}
 	
 	private LinkedList<String> leerArchivoLista() throws Exception {
@@ -219,7 +257,6 @@ public class Kardex {
         }
         pw.close();
         file.close();
-        System.out.println(rutaAnt+"\n"+archivo.getRutaArchivoActual());
 	}
 	
 	public boolean borrarArchivo(String ruta) {

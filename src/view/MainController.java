@@ -32,7 +32,7 @@ public class MainController implements Initializable {
 	}
 	
 	public void cambiarSceneTablaKardex(ActionEvent evento) {
-		try {			
+		try {
 			Main.getModel().leerArchivo(cbKardex.getSelectionModel().getSelectedItem());
 			cambiarScene(evento,"TablaKardex.fxml");
 		} catch(Exception e) {
