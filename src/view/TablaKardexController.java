@@ -103,8 +103,10 @@ public class TablaKardexController implements Initializable {
 			mensaje("Error","Ocurrio un error al cargar los datos de la cabecera de la tabla.",AlertType.ERROR);
 			return;
 		}
-		lblEmpresa.setText("Nombre de la empresa: "+datosCabecera[0]);
 		datosCabecera[1] = datosCabecera[1].split(" - ")[0];
+		if (datosCabecera[1].equalsIgnoreCase("PP"))
+			mensaje("En desarrollo","Esta tipo de método esta en desarrollo y puede contener errores.",AlertType.INFORMATION);
+		lblEmpresa.setText("Nombre de la empresa: "+datosCabecera[0]);
 		lblMetodo.setText("Método de valoración: "+datosCabecera[1]);
 		lblValor.setText(datosCabecera[1].equalsIgnoreCase("PEPS") ? "Valor unitario: ":lblValor.getText());
 		lblArticulo.setText("Artículo: "+datosCabecera[2]);

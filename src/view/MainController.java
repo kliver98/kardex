@@ -28,7 +28,9 @@ public class MainController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		cbKardex.getItems().removeAll(cbKardex.getItems());
-		cbKardex.getItems().addAll(Main.getModel().nombresKardexCreados());
+		String[] creados = Main.getModel().nombresKardexCreados();
+		if (creados!=null)
+			cbKardex.getItems().addAll(creados);
 	}
 	
 	public void cambiarSceneTablaKardex(ActionEvent evento) {
