@@ -11,6 +11,8 @@ public class PP implements Metodo {
 
 	public PP() {
 		datos = new TreeMap<Integer, Registro>();
+		registros = new ArrayList<>();
+		promedioP = new InventarioPP();
 	}
 
 	@Override
@@ -32,12 +34,15 @@ public class PP implements Metodo {
 
 	public void addDatos(String[] datos) {
 		// String dia, String descripcion, int cantidad, double valorU
+		
 		String dia = datos[0];
 		String descripcion = datos[1];
 		double valorU = 0;
 		if (datos[2] != "") {
-			System.out.println(datos[2] + "Entro");
-			valorU = Double.parseDouble(datos[2]);
+			if(!datos[2].equals("D")) {
+				valorU = Double.parseDouble(datos[2]);
+			}
+			
 		}
 		int cantidadEntrada = 0;
 		int cantidadS = 0;
@@ -46,8 +51,7 @@ public class PP implements Metodo {
 			cantidadEntrada = Integer.parseInt(datos[3]);
 		}
 		if (valorU != 0) {
-			Registro agregar = new Registro(dia, descripcion, "" + valorU, "" + cantidadEntrada, "" + 0, "" + 0, "" + 0,
-					"" + 0, "" + 0);
+			Registro agregar = new Registro(dia, descripcion, "" + valorU, "" + cantidadEntrada, "" + 0, "" + 0, "" + 0, "" + 0, "" + 0);
 			registros.add(agregar);
 		} else if (valorU == 0) {
 
@@ -58,8 +62,9 @@ public class PP implements Metodo {
 			} else {
 				Registro agregarL = search(dia);
 				int cant = agregarL.getCantidadSalida() * -1;
-				Registro agreg = new Registro("" + agregarL.getDia(), "" + agregarL.getDescripcion(), "" + 0, "" + 0,
-						"" + 0, "" + cant, "" + 0, "" + 0, "" + 0);
+				double valorS = agregarL.getValorSalida()* -1;
+				double valorUA = agregarL.getValorUnitario();
+				Registro agreg = new Registro("" + agregarL.getDia(), "" + agregarL.getDescripcion(), ""+valorUA, "" + 0, "" + 0, "" + cant, ""+valorS, "" + 0, "" + 0);
 				registros.add(agreg);
 			}
 
@@ -68,11 +73,12 @@ public class PP implements Metodo {
 
 	public Registro search(String dia) {
 
+		
 		Registro search = null;
 		boolean encontrado = false;
 		int i = 0;
 		while (i < registros.size() && encontrado == false) {
-			if (registros.get(i).getDia().equals(dia)) {
+			if (registros.get(i).getDia() == Integer.parseInt(dia)) {
 				search = registros.get(i);
 				encontrado = true;
 			}

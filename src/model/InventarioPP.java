@@ -84,20 +84,19 @@ public class InventarioPP {
 		cantidadTotal -= cantidadS;
 		
 		String datos = valorU + "#"+ valorS + "#" + cantidadTotal + "#" +  saldoTotal;
-		//System.out.println(datos + "<<<<<<<<<<<< datos >>>>>>>>>>>");
+		
 		return datos;
 	}
 	
 	public String devolucion(Registro act, double saldoTotal, int cantidadTotal) {
 		int cantidadS = act.getCantidadSalida();
-		double valorU = saldoTotal / cantidadTotal;
-		double valorS= valorU*cantidadS;
+		double valorU = act.getValorUnitario();
+		double valorS = act.getValorSalida();;
 		
-		saldoTotal += valorS;
-		cantidadTotal += cantidadS;
+		saldoTotal -= valorS;
+		cantidadTotal -= cantidadS;
 		
 		String datos = valorU + "#"+ valorS + "#" + cantidadTotal + "#" +  saldoTotal;
-		System.out.println(datos + "<<<<<<<<<<<< datos >>>>>>>>>>>");
 		return datos;
 		
 	}
