@@ -61,11 +61,22 @@ public class PP implements Metodo {
 				registros.add(agregar);
 			} else {
 				Registro agregarL = search(dia);
-				int cant = agregarL.getCantidadSalida() * -1;
-				double valorS = agregarL.getValorSalida()* -1;
-				double valorUA = agregarL.getValorUnitario();
-				Registro agreg = new Registro("" + agregarL.getDia(), "" + agregarL.getDescripcion(), ""+valorUA, "" + 0, "" + 0, "" + cant, ""+valorS, "" + 0, "" + 0);
-				registros.add(agreg);
+				if(agregarL.getTipoRegistro() == 'V') {
+					int cant = agregarL.getCantidadSalida() * -1;
+					double valorS = agregarL.getValorSalida()* -1;
+					double valorUA = agregarL.getValorUnitario();
+					Registro agreg = new Registro("" + agregarL.getDia(), "" + agregarL.getDescripcion(), ""+valorUA, "" + 0, "" + 0, "" + cant, ""+valorS, "" + 0, "" + 0);
+					registros.add(agreg);
+				}
+				else {
+					
+					int cant = agregarL.getCantidadEntrada() * -1;
+					double valorE = agregarL.getValorEntrada() * -1;
+					double valorUA = agregarL.getValorUnitario();
+					Registro agreg = new Registro("" + agregarL.getDia(), "" + agregarL.getDescripcion(), ""+valorUA, "" + cant, "" + valorE, "" + 0, ""+0, "" + 0, "" + 0);
+					registros.add(agreg);
+				}
+				
 			}
 
 		}

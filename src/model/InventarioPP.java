@@ -52,6 +52,18 @@ public class InventarioPP {
 				cantidadTotal = Integer.parseInt(datosA[2]);
 				saldoTotal = Double.parseDouble(datosA[3]);
 			}
+			else if (actual.isDevolucionC()) {
+				String cad = devolucionC(actual, saldoTotal, cantidadTotal);
+				String[] datosA = cad.split("#");	
+				//String datos = valorU + "#"+ valorE + "#" + cantidadTotal + "#" +  saldoTotal;
+				
+				actual.setValorUnitario(Double.parseDouble(datosA[0]));
+				actual.setValorEntrada(Double.parseDouble(datosA[1]));
+				actual.setCantidadSaldo(Integer.parseInt(datosA[2]));
+				actual.setValorSaldo(Double.parseDouble(datosA[3]));	
+				cantidadTotal = Integer.parseInt(datosA[2]);
+				saldoTotal = Double.parseDouble(datosA[3]);
+			}
 
 			i++;
 			if (i < datos.size()) {
@@ -80,8 +92,15 @@ public class InventarioPP {
 		int cantidadS = act.getCantidadSalida();
 		double valorU = saldoTotal / cantidadTotal;
 		double valorS= valorU*cantidadS;
-		saldoTotal -= valorS;
-		cantidadTotal -= cantidadS;
+		if(cantidadTotal > cantidadS) {
+			saldoTotal -= valorS;
+			cantidadTotal -= cantidadS;
+		}
+		else {
+			valorS = 0;
+			act.setCantidadSalida(0);
+		}
+		
 		
 		String datos = valorU + "#"+ valorS + "#" + cantidadTotal + "#" +  saldoTotal;
 		
@@ -97,6 +116,21 @@ public class InventarioPP {
 		cantidadTotal -= cantidadS;
 		
 		String datos = valorU + "#"+ valorS + "#" + cantidadTotal + "#" +  saldoTotal;
+		return datos;
+		
+	}
+	
+	public String devolucionC (Registro act, double saldoTotal, int cantidadTotal) {
+		
+		int cantidadE = act.getCantidadEntrada();
+		double valorU = act.getValorUnitario();	
+		double valorE = act.getValorEntrada();
+		
+		System.out.println(valorE + "valorE >>>>>> ");
+		saldoTotal += valorE;
+		cantidadTotal += cantidadE;
+		
+		String datos = valorU + "#"+ valorE + "#" + cantidadTotal + "#" +  saldoTotal;
 		return datos;
 		
 	}

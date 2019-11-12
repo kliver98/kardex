@@ -148,7 +148,7 @@ public class Registro {
 	}
 	
 	public boolean isCompra() {
-		return cantidadEntrada != 0 && valorUnitario != 0;
+		return cantidadEntrada != 0 && valorUnitario != 0 && cantidadEntrada > 0;
 	}
 	
 	public boolean isVenta() {
@@ -159,4 +159,8 @@ public class Registro {
 		return cantidadSalida < 0;
 	}
   
+	public boolean isDevolucionC() {
+		
+		return cantidadEntrada < 0;
+	}
 }
