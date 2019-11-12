@@ -111,6 +111,13 @@ public class TablaKardexController implements Initializable {
 		lblPeriodo.setText("Período: "+datosCabecera[3]);
 		lblUnidades.setText("Unidad: "+datosCabecera[4]);
 		lblMin.setText("Cantidad mínima: "+datosCabecera[5]+" "+datosCabecera[4]);
+		
+		try {			
+			String[][] inicial = Main.getModel().obtenerMatrizInicial();
+			setDatosEnTabla(inicial);
+		} catch (Exception e) { 
+		}
+		
 	}
 	
 	public void setModificationsFields(ActionEvent evento) {
@@ -160,7 +167,7 @@ public class TablaKardexController implements Initializable {
 		setDatosEnTabla(matriz);
 	}
 	
-	private void setDatosEnTabla(String[][] datos) {
+	public void setDatosEnTabla(String[][] datos) {
 		tabla.getItems().clear();
 		for (int i = 0; i < datos.length; i++) {
 			String[] aux = new String[9];
@@ -169,6 +176,8 @@ public class TablaKardexController implements Initializable {
 			}			
 			tabla.getItems().add(new DatosModel(aux[0],aux[1],aux[2],aux[3],aux[4],aux[5],aux[6],aux[7],aux[8]));
 		}
+		if (Integer.parseInt(datos[datos.length-1][7])<Integer.parseInt(lblMin.getText().split(" ")[2]))
+			mensaje("Reabastecer","Cuidado! tiene menos del inventario mínimo en Stock.",AlertType.WARNING);
 	}
 	
 	public void eliminarRegistro(ActionEvent evento) {
@@ -284,7 +293,11 @@ public class TablaKardexController implements Initializable {
 	}
 
 	public void guardarCambios(ActionEvent evento) {
-		
+		boolean seGuardo = Main.getModel().guardarCambios();
+		String mensaje = "Se guardaron los cambios.";
+		if (!seGuardo)
+			mensaje = "No se guardaron los cambios.";
+		mensaje("Confirmación",mensaje,AlertType.CONFIRMATION);
 	}
 	
 	public void exit() {
