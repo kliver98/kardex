@@ -16,7 +16,7 @@
    <children>
       <BorderPane prefHeight="600.0" prefWidth="600.0">
          <top>
-            <Label text="Crear Nuevo" textAlignment="CENTER" underline="true" wrapText="true" BorderPane.alignment="CENTER_LEFT">
+            <Label styleClass="label-header" text="Crear Nuevo" textAlignment="CENTER" textFill="#cd6767" underline="true" wrapText="true" BorderPane.alignment="CENTER_LEFT">
                <font>
                   <Font name="System Bold" size="36.0" />
                </font>

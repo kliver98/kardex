@@ -4,26 +4,25 @@ import java.util.LinkedList;
 
 public class InventarioPEPS {
 
-	class Par
-	{
+	class Par {
 		private int cantidad;
 		private double valor;
-		public Par(int c, double v)
-		{
+		public Par(int c, double v) {
 			cantidad = c;
 			valor = v;
 		}
-		public void setCantidad(int nueva)
-		{
+		public void setCantidad(int nueva) {
 			cantidad = nueva;
 		}
-		public int getCantidad()
-		{
+		public int getCantidad() {
 			return cantidad;
 		}
-		public double getValor()
-		{
+		public double getValor() {
 			return valor;
+		}
+		@Override
+		public String toString() {
+			return cantidad+" c/u "+valor;
 		}
 	}
 	
@@ -31,54 +30,65 @@ public class InventarioPEPS {
 	private int cantidadTotal;
 	private double saldoTotal;
 	
-	public InventarioPEPS()
-	{
+	public InventarioPEPS() {
 		inventario = new LinkedList<Par>();
 		cantidadTotal = 0;
 		saldoTotal = 0;
 	}
 	
-	public void agregarProducto(int cantidad, double valor)
-	{
+	public void agregarProducto(int cantidad, double valor) {
 		saldoTotal += valor*cantidad;
 		cantidadTotal+=cantidad;
 		inventario.add(new Par(cantidad,valor));
 	}
 	
-	public double sacarProductos(int cantidad)
-	{
+	public double sacarProductos(int cantidad) {
 		cantidadTotal-=cantidad;
 		double precio = 0;
 		Par aux = inventario.peek();
+		if (inventario.isEmpty()) {
+			saldoTotal-=precio;
+			return -1;
+		}
 		int resta = aux.getCantidad()-cantidad;
-		if (resta>0) {
-			aux.setCantidad(aux.getCantidad()-cantidad);
+		if (resta>=0) {
+			aux.setCantidad(resta);
 			precio = cantidad*aux.getValor();
 			saldoTotal-=precio;
 			return precio;
 		}
-		while(resta<=0) { //Es por que me faltan unidades y las de aux no me satisfacen
+		while(resta<0) { //Es por que me faltan unidades y las de aux no me satisfacen
 			precio += aux.getCantidad()*aux.getValor();
 			inventario.poll();
 			aux = inventario.peek();
+			if (inventario.isEmpty()) {
+				saldoTotal-=precio;
+				return -1;
+			}
 			resta = aux.getCantidad()+resta;
-			if (resta>0) {
-				precio += aux.getValor()*(aux.getCantidad()-resta);
-				aux.setCantidad(aux.getCantidad()-resta);
+			if (resta>=0) {
+				precio += aux.getValor()*(+aux.getCantidad()-resta);
+				aux.setCantidad(resta);
 			}
 		}
 		saldoTotal-=precio;
 		return precio;
 	}
 	
-	public int getCantidadDisponible()
-	{
+	public int getCantidadDisponible() {
 		return cantidadTotal;
 	}
 	
-	public double getSaldo()
-	{
+	public double getSaldo(){
 		return saldoTotal;
+	}
+	
+	public void setSaldo(double n) {
+		saldoTotal = n;
+	}
+	
+	public void setCantidad(int n) {
+		cantidadTotal = n;
 	}
 	
 }

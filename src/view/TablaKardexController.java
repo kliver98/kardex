@@ -5,8 +5,6 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class TablaKardexController implements Initializable {
@@ -75,7 +74,6 @@ public class TablaKardexController implements Initializable {
     public TableColumn<DatosModel, String> cantSaldo;
 	@FXML
     public TableColumn<DatosModel, String> valorSaldo;
-	private ObservableList<DatosModel> tablaModel = FXCollections.observableArrayList();
 	private String datosCabecera[];//empresa-metodo-periodo-articulo-unidad-proovedor-cantMin-cantMax-comentario
 	
 	public TablaKardexController() {
@@ -102,7 +100,7 @@ public class TablaKardexController implements Initializable {
 		try {			
 			datosCabecera = Main.getModel().getDatosCabeceraKardex();
 		} catch(Exception e) {
-			mensaje("Error","Ocurrio un error.",AlertType.ERROR);
+			mensaje("Error","Ocurrio un error al cargar los datos de la cabecera de la tabla.",AlertType.ERROR);
 			return;
 		}
 		lblEmpresa.setText("Nombre de la empresa: "+datosCabecera[0]);
@@ -119,65 +117,68 @@ public class TablaKardexController implements Initializable {
 		String item = cbTipoModificacion.getSelectionModel().getSelectedItem();
 		String[] tiposModificaciones = Main.getModel().getTiposModificaciones();
 		if (item.equalsIgnoreCase(tiposModificaciones[0])) {
-			tfValor.setEditable(true);
-			tfDia.setEditable(true);
-			tfCantidad.setEditable(true);
-			tfDescripcion.setEditable(true);
+			tfValor.setDisable(false);
+			tfDia.setDisable(false);
+			tfCantidad.setDisable(false);
+			tfDescripcion.setDisable(false);
 		} else if (item.equalsIgnoreCase(tiposModificaciones[1])) {
+			tfValor.setDisable(true);
 			tfValor.setText("");
-			tfValor.setEditable(false);
-			tfDia.setEditable(true);
-			tfCantidad.setEditable(true);
-			tfDescripcion.setEditable(true);
+			tfDia.setDisable(false);
+			tfCantidad.setDisable(false);
+			tfDescripcion.setDisable(false);
 		} else if (item.equalsIgnoreCase(tiposModificaciones[2])) {
-			tfDia.setEditable(true);
-			tfValor.setEditable(false);
+			tfDia.setDisable(false);
+			tfValor.setDisable(true);
+			tfCantidad.setDisable(true);
+			tfDescripcion.setDisable(true);
 			tfValor.setText("");
 			tfCantidad.setText("");
-			tfCantidad.setEditable(false);
-			tfDescripcion.setEditable(false);
+			tfDescripcion.setText("");
 		}
 	}
 	
 	public void btnModificarTabla(ActionEvent evento) { //Aqui se da compra-venta-devolucion
+		if (cbTipoModificacion.getSelectionModel().getSelectedItem()==null) {
+			mensaje("Error","Debe seleccionar una operación [COMPRA-VENTA-DEVOLUCIÓN].",AlertType.ERROR);
+			return;
+		} 
 		boolean c = cbTipoModificacion.getSelectionModel().getSelectedItem().split(" ")[1].equals("C");
 		String[] datos = new String[] {tfDia.getText(),tfDescripcion.getText(),tfValor.getText(),tfCantidad.getText(),"0","0",
 				"0","0","0"}; //Estoy comprando
 		datos = c ? datos:new String[] {tfDia.getText(),tfDescripcion.getText(),"0","0","0",tfCantidad.getText(),
 				"0","0","0"}; //Estoy vendiendo
-		datos = !cbTipoModificacion.getSelectionModel().getSelectedItem().split(" ")[1].equalsIgnoreCase("D") ? datos : new String[] {tfDia.getText(),"D","","","","","","",""};
-		String[][] matrix = Main.getModel().modificarFila(datos);
-		
-		if (matrix==null)
+		datos = !cbTipoModificacion.getSelectionModel().getSelectedItem().split(" ")[1].equalsIgnoreCase("D") ? datos : new String[] {tfDia.getText(),"","D","0","0","0","0","0","0"};
+		String[][] matriz = Main.getModel().modificarFila(datos);
+		if (matriz==null) { //Este mesaje se muestra cuando los datos no estan correctamente llenados
+			mensaje("Error de entradas","Ocurrio un error, verifique que ingreso todos los datos necesarios en su formato correcto.",AlertType.ERROR);
 			return;
+		} else if (matriz.length==0) { //Este mensaje se meustra cuando no hay inventario suficiente para hacer la compra
+			mensaje("Error de Inventario","No hay suficiente productos en el inventario para realizar la venta.",AlertType.WARNING);
+			return;
+		}
+		setDatosEnTabla(matriz);
+	}
+	
+	private void setDatosEnTabla(String[][] datos) {
 		tabla.getItems().clear();
-		for (int i = 0; i < matrix.length; i++) {
+		for (int i = 0; i < datos.length; i++) {
 			String[] aux = new String[9];
-			for (int j = 0; j < matrix[i].length; j++) {
-				aux[j] = matrix[i][j];
+			for (int j = 0; j < datos[i].length; j++) {
+				aux[j] = datos[i][j];
 			}			
 			tabla.getItems().add(new DatosModel(aux[0],aux[1],aux[2],aux[3],aux[4],aux[5],aux[6],aux[7],aux[8]));
 		}
 	}
 	
-	public void corregirRegistro(ActionEvent evento) {
-		String id = getRespuestaPopUp("Corregir registro","Introduzca el identificador del registro del kardex.");
-		try {
-			if (id!=null && !id.trim().equals(""))
-				cambiarSceneModificarRegistro(evento);
-		} catch (Exception e) {
-			mensaje("Error","Ha ocurrido un error, por favor vuelva a intentarlo.",AlertType.ERROR);
-		}
-		
-	}
-	
 	public void eliminarRegistro(ActionEvent evento) {
-		String id = getRespuestaPopUp("Eliminar Registro","Introduzca el identificador del registro del kardex.");
+		String id = getRespuestaPopUp("Eliminar Registro","Introduzca el identificador [Día] del registro del kardex.").trim();
 		try {
-			if (id!=null && !id.trim().equals(""))
-				cambiarSceneModificarRegistro(evento);
+			Integer.parseInt(id);
+			if (!id.equals(""))
+				System.out.println("Debo hacer funcionalidad para eliminar registro.");
 		} catch (Exception e) {
-			mensaje("Error","Ha ocurrido un error, por favor vuelva a intentarlo.",AlertType.ERROR);
+			mensaje("Error","El identificador no es válido.",AlertType.ERROR);
 		}
 	}
 	
@@ -198,7 +199,7 @@ public class TablaKardexController implements Initializable {
 	}
 	
 	public void mensajeCreditos() {
-		mensaje("Crédtios...","Este software ha sido desarrollado por Fanny & Kliver - kliver1998@hotmail.com",AlertType.INFORMATION);
+		mensaje("Crédtios...","Este software ha sido desarrollado por Fanny & Kliver - Sugerencias o inquietudes: kliver1998@hotmail.com",AlertType.INFORMATION);
 	}
 	
 	public void mensajeAyuda() {
@@ -229,10 +230,6 @@ public class TablaKardexController implements Initializable {
 		cambiarScene(evento,"Main.fxml");
 	}
 	
-	public void cambiarSceneModificarRegistro(ActionEvent evento) throws IOException {
-		
-	}
-	
 	public void cambiarSceneModificarDatosBasicos(ActionEvent evento) throws IOException {
 		cambiarScene(evento,"ModificarDatosBasicos.fxml");
 	}
@@ -253,10 +250,17 @@ public class TablaKardexController implements Initializable {
 		
 	}
 	
-	public void borrarArchivo() {
-		boolean borrado = Main.getModel().borrarArchivo();
+	public void borrarArchivo(ActionEvent evento) throws Exception {
+		String res = getRespuestaPopUp("Eliminar el archivo ","Escriba \"si\" para eliminar. Sin comillas.");
+		if (res==null || !res.equalsIgnoreCase("si"))
+			return;
+		boolean borrado = Main.getModel().borrarArchivo("");//Vacio significa que borre el archivo con el que se esta trabajando
 		if (!borrado)
 			mensaje("Error al borrar","No se pudo borrar el archivo.",AlertType.ERROR);
+		else {
+			mensaje("Confirmación","El archivo fue eliminado exitosamente.",AlertType.CONFIRMATION);
+			cambiarSceneMain(evento);
+		}
 	}
 	
 	public void cerrarArchivo(ActionEvent evento) {
@@ -270,15 +274,19 @@ public class TablaKardexController implements Initializable {
 		
 	}
 	
+	public void editarFila(MouseEvent e) { //Funcionalidad para implementar, mostrar ventana para editar info y ver completa la info
+//		int c = e.getClickCount(); //Si es 2 mostrar pantalla editar info
+//		System.out.println("Click count: "+c);
+//		DatosModel item = tabla.getSelectionModel().getSelectedItem();
+//		if (item==null)
+//			return;
+//		System.out.println(item.toString());
+	}
+
+	public void guardarCambios(ActionEvent evento) {
+		
+	}
 	
-	public ObservableList<DatosModel> getTablaModel() {
-		return tablaModel;
-	}
-
-	public void setTablaModel(ObservableList<DatosModel> tablaModel) {
-		this.tablaModel = tablaModel;
-	}
-
 	public void exit() {
 		System.exit(0);
 	}

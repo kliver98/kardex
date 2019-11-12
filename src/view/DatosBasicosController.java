@@ -24,7 +24,7 @@ public class DatosBasicosController implements Initializable {
 	@FXML
 	private TextField tfEmpresa;
 	@FXML
-	private TextField tfMetodo;
+	private ComboBox<String> cbMetodo;
 	@FXML
 	private ComboBox<String> cbMes;
 	@FXML
@@ -50,7 +50,9 @@ public class DatosBasicosController implements Initializable {
 	public void initialize(URL u, ResourceBundle r) {
 		String[] datosBasicos = Main.getModel().getDatosBasicosArchivo();
 		tfEmpresa.setText(datosBasicos[0]);
-		tfMetodo.setText(datosBasicos[1]);
+		cbMetodo.getItems().removeAll(cbMetodo.getItems());
+		cbMetodo.getItems().addAll(Main.getModel().getTiposMetodos());
+		cbMetodo.setValue(datosBasicos[1]);
 		//
 		String[] periodo = datosBasicos[2].split("/");
 		String[][] datosPeriodos = Main.getModel().getDatosPeriodos();
@@ -72,13 +74,16 @@ public class DatosBasicosController implements Initializable {
 	}
 	
 	public void btnModificar(ActionEvent evento) {
-		String[] datos = new String[]{tfEmpresa.getText(),tfMetodo.getText(),
+		String[] datos = new String[]{tfEmpresa.getText(),cbMetodo.getValue(),
 				cbMes.getSelectionModel().getSelectedItem()+"/"+cbAnio.getSelectionModel().getSelectedItem(),
 				tfArticulo.getText(), tfUnidad.getText(), tfProovedor.getText(), tfMin.getText(), tfMax.getText(),
 				tfComentario.getText()};
-		boolean seModifico = Main.getModel().modificarDatosBasicosArchivo(datos);
-		if (!seModifico)
+		try {
+			Main.getModel().modificarDatosBasicosArchivo(datos);
+			cambiarSceneTablaKardex(evento);
+		} catch(Exception e) {			
 			mensajePopUp("Error","No se pudo modificar el archivo",AlertType.ERROR);
+		}
 	}
 
 	public void cambiarSceneTablaKardex(ActionEvent evento) throws Exception {

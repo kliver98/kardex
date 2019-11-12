@@ -16,7 +16,7 @@
    <children>
       <BorderPane prefHeight="600.0" prefWidth="600.0">
          <top>
-            <Label text="Información básica del Archivo" textAlignment="CENTER" underline="true" wrapText="true" BorderPane.alignment="CENTER_LEFT">
+            <Label text="Información básica del Archivo" textAlignment="CENTER" textFill="#cc6666" underline="true" wrapText="true" BorderPane.alignment="CENTER_LEFT">
                <font>
                   <Font name="System Bold" size="32.0" />
                </font>
@@ -95,7 +95,6 @@
                   <TextField fx:id="tfMin" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                   <TextField fx:id="tfMax" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                   <TextField fx:id="tfComentario" editable="false" maxHeight="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                  <TextField fx:id="tfMetodo" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="168.000048828125" minWidth="10.0" prefWidth="155.99998779296874" />
@@ -109,6 +108,7 @@
                         <ComboBox fx:id="cbAnio" disable="true" prefWidth="150.0" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
+                  <ComboBox fx:id="cbMetodo" disable="true" prefHeight="26.0" prefWidth="293.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>
                <padding>
                   <Insets bottom="25.0" top="25.0" />

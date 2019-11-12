@@ -101,5 +101,13 @@ public class DatosModel {
 		this.valorSaldo = valorSaldo;
 	}
 	
+	@Override
+	public String toString() {
+		@SuppressWarnings("static-access")
+		String sep = Main.getModel().SEPARADOR;
+		return  dia.get() + sep + descripcion.get() + sep+ valorUnitario.get() + sep + cantEntrada.get() + sep + 
+				valorEntrada.get() + sep + cantSalidas.get() + sep + valorSalidas.get() + sep + cantSaldo.get() + sep + 
+				valorSaldo.get();
+	}
 	
 }
